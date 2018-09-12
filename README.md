@@ -10,12 +10,12 @@
 
 
 ### 目录结构
-1.  [app](https://gitee.com/KKan/RMedal/tree/master/app)
+1.  [app](https://github.com/skpy5272/RMedal/tree/master/app)
    - api 网络请求封装和请求地址
    - base 基类
    - modelbean 实体类
    - ui 视图 mvp
-2.  [tools-library 常用封装工具](https://gitee.com/KKan/RMedal/tree/master/tools-library)
+2.  [tools-library 常用封装工具](https://github.com/skpy5272/RMedal/tree/master/tools-library)
 #### 备注个问题
 1. 09-10测试的时候 关于SP清除缓存后Acache读取不到文件，加打印后就不复现这问题，以后会留意(已解决)
 
