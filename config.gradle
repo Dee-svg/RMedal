@@ -1,0 +1,11 @@
+ext {
+
+    android = [compileSdkVersion: 26,
+               buildToolsVersion: "27.0.3",
+               applicationId    : "com.name.rmedal",
+               minSdkVersion    : 16,
+               targetSdkVersion : 26,
+               versionCode      : 10000,
+               versionName      : "1.0.0"]
+
+}

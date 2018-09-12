@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whitesmoke"
+    android:orientation="vertical">
+
+    <com.veni.tools.view.TitleView
+        android:id="@+id/runtext_title_view"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_toolbar_primary"
+        app:title="RunTextView"
+        app:titleColor="@color/white" />
+
+    <com.veni.tools.view.RunTextView
+        android:id="@+id/runtext_runtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="邻家小萝莉干了什么坏事，妈妈生气不理她了。爸爸温柔地告诉萝莉：妈妈在等你认错呢，快去吧。萝莉就泪汪汪地过去对妈妈说：你……你是不是范冰冰？“啥？！”妈妈莫名其妙。萝莉继续泪汪汪：我认错了…"
+        android:textColor="@color/dimgray" />
+
+    <com.veni.tools.view.TextViewVertical
+        android:id="@+id/runtext_vertical_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.veni.tools.view.TextViewVerticalMore
+        android:id="@+id/runtext_verticalmore_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
+
+</LinearLayout>

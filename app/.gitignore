@@ -1,0 +1,10 @@
+*.iml
+.gtadle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/build
+/.idea
+/recycler-adapter-helper/build
+/refresh-layout/build
+/tools-library/build
