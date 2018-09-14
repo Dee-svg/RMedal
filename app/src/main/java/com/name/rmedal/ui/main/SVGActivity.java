@@ -83,7 +83,6 @@ public class SVGActivity extends BaseActivity<SVGPresenter> implements SVGContra
         mSvgView.setOnStateChangeListener(new AnimatedSvgView.OnStateChangeListener() {
             @Override
             public void onStateChange(int state) {
-                LogTools.e(TAG, "state--" + state);
                 if (AnimatedSvgView.STATE_FINISHED == state) {
                     svgisok = true;
                     isfirstin();

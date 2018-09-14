@@ -6,14 +6,17 @@ import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.name.rmedal.R;
 import com.name.rmedal.api.AppConstant;
 import com.name.rmedal.base.BaseActivity;
+import com.veni.tools.LogTools;
 import com.veni.tools.StatusBarTools;
 import com.veni.tools.base.ActivityJumpOptionsTool;
+import com.veni.tools.interfaces.OnNoFastClickListener;
 import com.veni.tools.view.RunTextView;
 import com.veni.tools.view.TextViewVertical;
 import com.veni.tools.view.TextViewVerticalMore;
@@ -21,7 +24,9 @@ import com.veni.tools.view.TitleView;
 import com.veni.tools.view.ToastTool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -90,7 +95,7 @@ public class RunTextActivity extends BaseActivity {
         titleList.add("你冷酷外表下藏着诗情画意");
         titleList.add("我已经够胖还吃东西");
         titleList.add("你踏着七彩祥云离去");
-        titleList.add("我被留在这里");
+//        titleList.add("我被留在这里");
 
         //初始化TextViewVertical配置
         runtextVerticalView.setTextList(titleList);
@@ -105,15 +110,8 @@ public class RunTextActivity extends BaseActivity {
         });
 
         List<View> views = new ArrayList<>();
-        setUPMarqueeView(views, 11);
+        setUPMarqueeView(views, titleList);
         runtextVerticalmoreView.setViews(views);
-        runtextVerticalmoreView.setOnItemClickListener(new TextViewVerticalMore.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-
-                ToastTool.success("点击了 : " + position);
-            }
-        });
     }
 
     @Override
@@ -131,24 +129,47 @@ public class RunTextActivity extends BaseActivity {
     /**
      * 模拟数据2
      */
-    private void setUPMarqueeView(List<View> views, int size) {
-        for (int i = 0; i < size; i = i + 2) {
-            //设置滚动的单个布局
-            LinearLayout moreView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.activity_runtext_item, null);
-            //初始化布局的控件
-            TextView tv1 = (TextView) moreView.findViewById(R.id.runtext_item_tv1);
-            TextView tv2 = (TextView) moreView.findViewById(R.id.runtext_item_tv2);
-            //进行对控件赋值
-            tv1.setText("五一欢乐与您共享，ＸＸ节能高清惊喜大促销。");
-            if (size > i + 1) {
-                //因为淘宝那儿是两条数据，但是当数据是奇数时就不需要赋值第二个，所以加了一个判断，还应该把第二个布局给隐藏掉
-                tv2.setText("五一充值送机，你准备好了吗？");
-            } else {
-                tv2.setVisibility(View.GONE);
-            }
+    private void setUPMarqueeView(List<View> views, ArrayList<String> titles) {
+        Map<String,View> viewMap = new HashMap<>();
+        for (int i = 0; i < titles.size(); i++) {
+            LinearLayout moreView;
+            if(i%2!=0){
+                moreView= (LinearLayout) viewMap.get(""+(i-1));
+                TextView tv2 = moreView.findViewById(R.id.runtext_item_tv2);
+                RelativeLayout item_rl2 = moreView.findViewById(R.id.runtext_item_rl2);
+                item_rl2.setVisibility(View.VISIBLE);
+                //当数据是奇数时不需要赋值第二个，所以加了一个判断，并且把第二个布局给隐藏掉
 
-            //添加到循环滚动数组里面去
-            views.add(moreView);
+                final String title=titles.get(i);
+                tv2.setText(title);
+                tv2.setOnClickListener(new OnNoFastClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View view) {
+                        ToastTool.success("点击了 : " + title);
+                    }
+                });
+                //添加到循环滚动数组里面去
+                views.add(moreView);
+            }else {
+                //设置滚动的单个布局
+                moreView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.activity_runtext_item, null);
+                //初始化布局的控件
+                TextView tv1 =  moreView.findViewById(R.id.runtext_item_tv1);
+                //进行对控件赋值
+                final String title=titles.get(i);
+                tv1.setText(title);
+                tv1.setOnClickListener(new OnNoFastClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View view) {
+                        ToastTool.success("点击了 : " + title);
+                    }
+                });
+                viewMap.put(""+i,moreView);
+                if(i==(titles.size()-1)){
+                    //添加到循环滚动数组里面去
+                    views.add(moreView);
+                }
+            }
         }
     }
 }

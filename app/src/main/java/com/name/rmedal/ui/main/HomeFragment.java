@@ -165,8 +165,8 @@ public class HomeFragment extends BaseFragment {
                         ,"美女333"));
                 img_list.add(new BigImageBean("http://x.itunes123.com/uploadfiles/a3864382d68ce93bb7ab84775cb12d17.jpg"
                         ,"美女444"));
-                img_list.add(new BigImageBean("http://07.imgmini.eastday.com/mobile/20171109/20171109213644_1d934ed6d1143d2a63227336004e922a_1.jpeg"
-                        ,"美女???"));
+                img_list.add(new BigImageBean("http://c.hiphotos.baidu.com/image/pic/item/9d82d158ccbf6c81924a92c5b13eb13533fa4099.jpg"
+                        ,"美女555"));
                 String imglistjson = JsonTools.toJson(img_list);
                 BigImagePagerActivity.startAction(context, imglistjson, 0);
             }

@@ -7,7 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.name.rmedal.R;
+import com.name.rmedal.bigimage.BigImageBean;
+import com.name.rmedal.bigimage.BigImagePagerActivity;
 import com.name.rmedal.modelbean.CardDataItem;
+import com.veni.tools.JsonTools;
 import com.veni.tools.interfaces.OnNoFastClickListener;
 import com.veni.tools.view.ToastTool;
 import com.veni.tools.view.cardslide.CardAdapter;
@@ -95,7 +98,12 @@ public class CardGroupAdapter extends CardAdapter {
             maskView.setOnClickListener(new OnNoFastClickListener() {
                 @Override
                 protected void onNoDoubleClick(View view) {
-                    ToastTool.normal("其他");
+                    //放大查看图片
+                    List<BigImageBean> img_list = new ArrayList<>();
+                    img_list.add(new BigImageBean(itemData.getImagePath()
+                            , ""));
+                    String imglistjson = JsonTools.toJson(img_list);
+                    BigImagePagerActivity.startAction(context, imglistjson, 0);
                 }
             });
         }

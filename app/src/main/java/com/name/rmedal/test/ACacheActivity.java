@@ -18,6 +18,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.veni.tools.ACache;
+import com.veni.tools.DataTools;
+import com.veni.tools.TimeTools;
 import com.veni.tools.base.ActivityJumpOptionsTool;
 import com.veni.tools.StatusBarTools;
 import com.veni.tools.view.LabelsView;
@@ -158,9 +160,10 @@ public class ACacheActivity extends BaseActivity {
     private void setfuctionview(String labelstr) {
         switch (labelstr) {
             case "插入数据": {
-                ACache.get(context).put("数据", "-----", ACache.TIME_MINUTE);
+                String date= TimeTools.getCurrentDate(TimeTools.dateFormatYMDHMS);
+                ACache.get(context).put("数据", date, ACache.TIME_MINUTE);
                 long time = ACache.get(context).getKeyTimes("数据");
-                replaceadapter("插入数据\nkey:数据\nvalue:-----\n剩余时间:" + time);
+                replaceadapter("插入数据\nkey:数据\nvalue:"+date+"\n剩余时间:" + time);
                 break;
             }
             case "读取插入数据": {

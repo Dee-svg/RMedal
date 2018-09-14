@@ -106,7 +106,7 @@ public class BigImagePagerActivity extends BaseActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
         //设置侧滑退出
-//        setSwipeBackLayout(2);
+        setSwipeBackLayout(0);
         //设置沉侵状态栏
         StatusBarTools.immersive(context);
         //增加状态栏的高度

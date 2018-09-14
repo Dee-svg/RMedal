@@ -92,6 +92,11 @@ public class CacheActivity extends BaseActivity {
                 setfuctionview(labelstr);
             }
         });
+        long acdatasize = ACache.get(context).getCacheSize();
+        sizeofAC = DataTools.byte2FitSize(acdatasize);
+        long spdatasize = SPTools.getTotalCacheSize(context);
+        sizeofSP = DataTools.byte2FitSize(spdatasize);
+        upcacheData();
     }
 
     /**
