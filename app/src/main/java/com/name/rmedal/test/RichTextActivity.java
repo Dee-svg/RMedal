@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.name.rmedal.R;
 import com.name.rmedal.api.AppConstant;
 import com.name.rmedal.base.BaseActivity;
@@ -126,7 +127,7 @@ public class RichTextActivity extends BaseActivity {
             }
         });
 
-        mRxManager.add(Observable.timer(2000, TimeUnit.MILLISECONDS)
+        mRxManager.add(Observable.timer(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -141,7 +142,6 @@ public class RichTextActivity extends BaseActivity {
      * 模拟图文混排数据
      */
     private void upviewdata() {
-
         richTextView.setRichText(body);
         richTextView.setMovementMethod(LinkMovementMethod.getInstance());//加这句才能让里面的超链接生效,实测经常卡机崩溃
 
@@ -149,13 +149,15 @@ public class RichTextActivity extends BaseActivity {
             @Override
             public void imageClicked(List<String> imageUrls, int position) {
                 ToastTool.normal(imageUrls.get(position));
-
                 //放大查看图片
                 List<BigImageBean> img_list = new ArrayList<>();
-                img_list.add(new BigImageBean(imageUrls.get(position)
-                        , ""));
+                for(String imgurl:imageUrls){
+                    img_list.add(new BigImageBean(imgurl
+                            , ""));
+
+                }
                 String imglistjson = JsonTools.toJson(img_list);
-                BigImagePagerActivity.startAction(context, imglistjson, 0);
+                BigImagePagerActivity.startAction(context, imglistjson, position);
             }
         });
         ImageLoaderTool.display(context, richPhotoIv, "http://a3.topitme.com/1/21/79/1128833621e7779211o.jpg");

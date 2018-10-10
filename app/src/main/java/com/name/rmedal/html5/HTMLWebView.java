@@ -202,7 +202,9 @@ public class HTMLWebView extends WebView {
          */
         @Override
         public void onReceivedTitle(WebView view, String title) {
-            webUtilsListener.onReceivedTitle(view,title);
+            if(webUtilsListener!=null){
+                webUtilsListener.onReceivedTitle(view,title);
+            }
         }
 
 

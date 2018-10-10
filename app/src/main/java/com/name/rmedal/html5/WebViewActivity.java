@@ -1,5 +1,6 @@
 package com.name.rmedal.html5;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -16,7 +17,6 @@ import android.widget.LinearLayout;
 
 import com.name.rmedal.R;
 import com.name.rmedal.base.BaseActivity;
-import com.name.rmedal.bigimage.BigImagePagerActivity;
 import com.name.rmedal.tools.ContentViewHelper;
 import com.veni.tools.StatusBarTools;
 import com.veni.tools.base.ActivityJumpOptionsTool;
@@ -28,7 +28,6 @@ import com.veni.tools.view.ToastTool;
  * 当前类注释:
  * 网页窗口封装
  */
-
 public class WebViewActivity extends BaseActivity {
 
     public static final String INTENT_URL = "url";
@@ -37,7 +36,7 @@ public class WebViewActivity extends BaseActivity {
 
 
     public static void startAction(Context context, String url) {
-        startAction(context, url, "", true);
+        startAction(context, url, null, true);
     }
 
     public static void startAction(Context context, String url, String title) {
@@ -45,11 +44,11 @@ public class WebViewActivity extends BaseActivity {
     }
 
     /**
-     *
      * 启动入口
-     * @param context context
-     * @param url 网络地址
-     * @param title 显示标题
+     *
+     * @param context   context
+     * @param url       网络地址
+     * @param title     显示标题
      * @param needtitle 是否获取url的标题
      */
     public static void startAction(Context context, String url, String title, boolean needtitle) {
@@ -61,7 +60,8 @@ public class WebViewActivity extends BaseActivity {
                 .customAnim()
                 .start();
     }
-//不使用xml布局
+
+    //不使用xml布局
     @Override
     public int getLayoutId() {
         return 0;
@@ -73,14 +73,14 @@ public class WebViewActivity extends BaseActivity {
     }
 
     private HTMLWebView mWebView;
-    private String act_url = "https://www.baidu.com/";
-    private String act_title = "";
     private boolean needtitle;
 
+    @SuppressLint("AddJavascriptInterface")
     @Override
     public void initView(Bundle savedInstanceState) {
-        act_url = getIntent().getStringExtra(INTENT_URL);
-        act_title = getIntent().getStringExtra(INTENT_TITLE);
+        String act_url = getIntent().getStringExtra(INTENT_URL);
+        String act_title = getIntent().getStringExtra(INTENT_TITLE);
+        act_title = act_title == null || act_title.equals("") ? getResources().getString(R.string.app_name) : act_title;
         needtitle = getIntent().getBooleanExtra(INTENT_NEEDTITLE, false);
 
         //根布局视图构造器
@@ -97,13 +97,12 @@ public class WebViewActivity extends BaseActivity {
         baseView.addView(userView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         //获取网页标题
+        setTitle(act_title);
         mWebView.addWebUtilsListener(new WebUtilsListener() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 if (needtitle) {
                     setTitle(title);
-                } else {
-                    setTitle(act_title);
                 }
             }
         });

@@ -14,7 +14,28 @@ import java.util.List;
  * addPermission               : 添加权限
  * initPermission              : 请求权限
  */
-
+  /*
+     * 注册权限申请回调
+     *
+     * @param requestCode  申请码
+     * @param permissions  申请的权限
+     * @param grantResults 结果
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        LogTools.e(TAG,"requestCode"+requestCode);
+        LogTools.e(TAG,"permissions"+JsonTools.toJson(permissions));
+        LogTools.e(TAG,"grantResults--"+ JsonTools.toJson(grantResults));
+        if (requestCode == 1) {
+            if (grantResults.length > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //权限通过
+                } else {PERMISSION_DENIED
+                    //权限拒绝
+                }
+            }
+        }
+    }*/
 public class PermissionsTools {
 
     public static PermissionsTools.Builder with(Activity activity) {
@@ -34,9 +55,9 @@ public class PermissionsTools {
         /**
          * Determine whether <em>you</em> have been granted a particular permission.
          *
-         * @param permission The name of the permission being checked.
-         * @return {@link PackageManager#PERMISSION_GRANTED} if you have the
-         * permission, or {@link PackageManager#PERMISSION_DENIED} if not.
+         * @param permission 申请的权限.
+         * @return 允许这个权限返回{@link PackageManager#PERMISSION_GRANTED} ,
+         * 拒绝权限返回 {@link PackageManager#PERMISSION_DENIED}.
          * @see PackageManager#checkPermission(String, String)
          */
         public Builder addPermission(@NonNull String permission) {

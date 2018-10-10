@@ -11,8 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -31,11 +30,14 @@ import com.name.rmedal.tools.zxing.QrBarDecoder;
 import com.name.rmedal.tools.zxing.scancode.CameraManager;
 import com.name.rmedal.tools.zxing.scancode.CaptureActivityHandler;
 import com.name.rmedal.tools.zxing.scancode.decoding.InactivityTimer;
+import com.veni.tools.DataTools;
 import com.veni.tools.LogTools;
+import com.veni.tools.PermissionsTools;
 import com.veni.tools.StatusBarTools;
 import com.veni.tools.view.ToastTool;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
@@ -76,6 +78,7 @@ public class ScanerCodeActivity extends BaseActivity {
     private boolean hasSurface;//是否有预览
     private boolean vibrate = false;//扫描成功后是否震动
     private boolean mFlashing = true;//闪光灯开启状态
+    private boolean miswes = false;//文件读写权限 true 通过
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -101,10 +104,17 @@ public class ScanerCodeActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.scaner_code_top_openpicture:
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, AppConstant.GET_IMAGE_FROM_PHONE);
+                if (miswes) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent, AppConstant.GET_IMAGE_FROM_PHONE);
+                } else {
+                    PermissionsTools.with(context)
+                            .addPermission(Manifest.permission.CAMERA)
+                            .addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            .initPermission();
+                }
                 break;
         }
     }
@@ -156,6 +166,7 @@ public class ScanerCodeActivity extends BaseActivity {
         inactivityTimer.shutdown();
         super.onDestroy();
     }
+
     //========================================打开本地图片识别二维码 end=================================
     //--------------------------------------打开本地图片识别二维码 start---------------------------------
     @Override
@@ -175,7 +186,7 @@ public class ScanerCodeActivity extends BaseActivity {
                     if (rawResult != null) {
                         initDialogResult(rawResult);
                     } else {
-                        ToastTool.success( "图片识别失败!");
+                        ToastTool.success("图片识别失败!");
                     }
                 } catch (IOException ignored) {
                 }
@@ -184,12 +195,40 @@ public class ScanerCodeActivity extends BaseActivity {
             LogTools.e(TAG, " User canceled.");
         }
     }
+
     //==============================================================================================解析结果 及 后续处理 end
     private void initView() {
         //请求Camera权限 与 文件读写 权限
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        List<String> permissionList = PermissionsTools.with(context)
+                .addPermission(Manifest.permission.CAMERA)
+                .addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .initPermission();
+        miswes = DataTools.isEmpty(permissionList) ||!permissionList.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    /*
+     * 注册权限申请回调
+     *
+     * @param requestCode  申请码
+     * @param permissions  申请的权限
+     * @param grantResults 结果
+     * */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            for (int i = 0; i < permissions.length; i++) {
+                String camera = permissions[i];
+                if (camera.equals(Manifest.permission.CAMERA) && i < grantResults.length) {
+                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {//拒绝相机权限
+                        finish();
+                    }
+                }
+                if (camera.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && i < grantResults.length) {
+                    //通过文件读写权限
+                    miswes = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                }
+            }
         }
     }
 
@@ -258,7 +297,7 @@ public class ScanerCodeActivity extends BaseActivity {
             LogTools.v("扫描结果", realContent);
         }
         if (realContent.equals("")) {
-            ToastTool.success( "扫描失败!");
+            ToastTool.error("扫描失败!");
 //        if (handler != null) {
 //            // 连续扫描，不发送此消息扫描一次结束后就不能再次扫描
 //            handler.sendEmptyMessage(R.id.restart_preview);

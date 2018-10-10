@@ -2,6 +2,7 @@ package com.name.rmedal.test;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -21,6 +22,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.veni.tools.DataTools;
 import com.veni.tools.DeviceTools;
 import com.veni.tools.PermissionsTools;
 import com.veni.tools.StatusBarTools;
@@ -80,6 +82,7 @@ public class PhoneInfoActivity extends BaseActivity {
 
     private BaseQuickAdapter<DeviceBean, BaseViewHolder> functionadapter;
     private List<DeviceBean> devicelist = new ArrayList<>();
+    private boolean is_r_p_s=false;//读取电话信息权限 true 通过
     @Override
     public void initView(Bundle savedInstanceState) {
         //设置启动动画对应的view
@@ -126,16 +129,48 @@ public class PhoneInfoActivity extends BaseActivity {
         toastRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         toastRecyclerview.setAdapter(functionadapter);
         // 权限请求
-        PermissionsTools.with(context).addPermission(Manifest.permission.READ_PHONE_STATE).initPermission();
+        getPermission();
     }
 
     @OnClick({R.id.phone_info_get_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.phone_info_get_btn:
-                getPhoneInfo();
-                phoneInfoGetBtn.setVisibility(View.GONE);
+                if(is_r_p_s){
+                    getPhoneInfo();
+                    phoneInfoGetBtn.setVisibility(View.GONE);
+                }else {
+                    getPermission();
+                }
                 break;
+        }
+    }
+
+    /**
+     * 权限请求
+     */
+    private void getPermission(){
+        List<String> permissionList= PermissionsTools.with(context).addPermission(Manifest.permission.READ_PHONE_STATE).initPermission();
+        is_r_p_s = DataTools.isEmpty(permissionList) || !permissionList.contains(Manifest.permission.READ_PHONE_STATE);
+    }
+    /**
+     * 注册权限申请回调
+     *
+     * @param requestCode  申请码
+     * @param permissions  申请的权限
+     * @param grantResults 结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            for (int i = 0; i < permissions.length; i++) {
+                String camera = permissions[i];
+                if (camera.equals(Manifest.permission.READ_PHONE_STATE) && i < grantResults.length) {
+                    //读取电话信息权限
+                    is_r_p_s = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                }
+            }
         }
     }
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.veni.tools.DataTools;
+import com.veni.tools.LogTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +117,13 @@ public class RichText extends TextView implements Drawable.Callback, View.OnAtta
 
     @Override
     public void onViewDetachedFromWindow(View v) {
+        glideImageGeter.recycle();
+    }
+
+    //当View离开这个页面的时候调用
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         glideImageGeter.recycle();
     }
 

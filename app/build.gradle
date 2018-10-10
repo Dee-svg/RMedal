@@ -64,7 +64,7 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-banner:2.2.4'
     //底部导航按钮点击效果
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
-    //图片选择 TouchImageView图片缩放
+    //图片选择
     implementation 'me.iwf.photopicker:PhotoPicker:0.9.12@aar'
     //view注解
     implementation 'com.jakewharton:butterknife:8.0.1'

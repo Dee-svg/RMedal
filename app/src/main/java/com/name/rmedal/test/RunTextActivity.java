@@ -132,6 +132,13 @@ public class RunTextActivity extends BaseActivity {
     private void setUPMarqueeView(List<View> views, ArrayList<String> titles) {
         Map<String,View> viewMap = new HashMap<>();
         for (int i = 0; i < titles.size(); i++) {
+            final String title=titles.get(i);
+            OnNoFastClickListener noFastClickListener= new OnNoFastClickListener() {
+                @Override
+                protected void onNoDoubleClick(View view) {
+                    ToastTool.success("点击了 : " + title);
+                }
+            };
             LinearLayout moreView;
             if(i%2!=0){
                 moreView= (LinearLayout) viewMap.get(""+(i-1));
@@ -140,14 +147,8 @@ public class RunTextActivity extends BaseActivity {
                 item_rl2.setVisibility(View.VISIBLE);
                 //当数据是奇数时不需要赋值第二个，所以加了一个判断，并且把第二个布局给隐藏掉
 
-                final String title=titles.get(i);
                 tv2.setText(title);
-                tv2.setOnClickListener(new OnNoFastClickListener() {
-                    @Override
-                    protected void onNoDoubleClick(View view) {
-                        ToastTool.success("点击了 : " + title);
-                    }
-                });
+                tv2.setOnClickListener(noFastClickListener);
                 //添加到循环滚动数组里面去
                 views.add(moreView);
             }else {
@@ -156,14 +157,8 @@ public class RunTextActivity extends BaseActivity {
                 //初始化布局的控件
                 TextView tv1 =  moreView.findViewById(R.id.runtext_item_tv1);
                 //进行对控件赋值
-                final String title=titles.get(i);
                 tv1.setText(title);
-                tv1.setOnClickListener(new OnNoFastClickListener() {
-                    @Override
-                    protected void onNoDoubleClick(View view) {
-                        ToastTool.success("点击了 : " + title);
-                    }
-                });
+                tv1.setOnClickListener(noFastClickListener);
                 viewMap.put(""+i,moreView);
                 if(i==(titles.size()-1)){
                     //添加到循环滚动数组里面去

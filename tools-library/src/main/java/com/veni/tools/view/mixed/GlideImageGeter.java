@@ -35,6 +35,10 @@ public class GlideImageGeter implements Html.ImageGetter {
     private final TextView mTextView;
 
     public  void recycle() {
+        for (Target target : targets) {
+            //清除掉所有的图片加载请求
+            Glide.clear(target);
+        }
         targets.clear();
         for (GifDrawable gifDrawable : gifDrawables) {
             gifDrawable.setCallback(null);

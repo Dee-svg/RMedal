@@ -22,11 +22,6 @@ android {
         }
     }
 }
-ext {
-    isLibrary = true
-    pomArtifactId = "Rxtools"
-    pomDescription = "Rxtools of android picker"
-}
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
