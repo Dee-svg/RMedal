@@ -10,8 +10,10 @@ public class AppConstant {
     private static final String imgBaseUrl = "https://raw.githubusercontent.com/skpy5272/RMedal/master/appimg/";
     /*测试数据*/
     public static final String imgjson =
-            "[{ \"image_url\": \"" + imgBaseUrl + "2.jpg\"," +
+            "[{ \"image_url\": \"" + imgBaseUrl + "1.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析1111\"}," +
+                    "{\"image_url\": \"" + imgBaseUrl + "2.jpg\"," +
+                    "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析2222\"}," +
                     "{\"image_url\": \"" + imgBaseUrl + "3.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析2222\"}," +
                     "{\"image_url\": \"" + imgBaseUrl + "4.jpg\"," +
