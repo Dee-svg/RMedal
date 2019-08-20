@@ -4,7 +4,6 @@
 ## 项目介绍
    - 自己工作中的整理与总结
    - 沉浸工具-底部导航适配（小米9 华为mate20 vivo-nex 测试通过）
-   - ![ ](https://raw.githubusercontent.com/skpy5272/RMedal/master/appimg/Screenshot_20180910-090138.png)
 
 ### 软件架构
    - Rxjava + MVP
