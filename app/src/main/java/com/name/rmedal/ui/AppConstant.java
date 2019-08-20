@@ -10,20 +10,20 @@ public class AppConstant {
     private static final String imgBaseUrl = "https://raw.githubusercontent.com/skpy5272/RMedal/master/appimg/";
     /*测试数据*/
     public static final String imgjson =
-            "[{ \"image_url\": \"" + imgBaseUrl + "1.jpg\"," +
+            "[{ \"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/1.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析1111\"}," +
-                    "{\"image_url\": \"" + imgBaseUrl + "2.jpg\"," +
+                    "{\"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/2.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析2222\"}," +
-                    "{\"image_url\": \"" + imgBaseUrl + "3.jpg\"," +
-                    "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析2222\"}," +
-                    "{\"image_url\": \"" + imgBaseUrl + "4.jpg\"," +
+                    "{\"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/3.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析3333\"}," +
-                    "{\"image_url\": \"" + imgBaseUrl + "5.jpg\"," +
+                    "{\"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/4.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析4444\"}," +
-                    "{\"image_url\": \"" + imgBaseUrl + "6.jpg\"," +
+                    "{\"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/5.jpg\"," +
                     "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析5555\"}," +
-                    "{\"image_url\": \"" + imgBaseUrl + "7.jpg\"," +
-                    "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析6666\"}]";
+                    "{\"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/6.jpg\"," +
+                    "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析6666\"}," +
+                    "{\"image_url\": \"" + startUrl + "ResImage/raw/master/imageres/7.jpg\"," +
+                    "\"image_view_title\": \"图片详情\",\"image_describe\": \"图片赏析7777\"}]";
     public static final String newsjson =
             "{\"path\":\"" + imgBaseUrl + "\"," +
                     "\"image\":\"" + imgBaseUrl + "8.jpg\"," +
