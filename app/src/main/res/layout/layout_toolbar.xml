@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar_title_ll"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_tb_id"
+    <com.veni.tools.widget.TitleView
+        android:id="@+id/toolbar_title_view"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_toolbar_primary">
+        android:background="@drawable/bg_toolbar_blue"
+        app:leftIcon="@drawable/ic_back"
+        app:leftIconVisibility="true"
+        app:leftText="@string/arrow_left"
+        app:leftTextColor="@color/white"
+        app:leftTextSize="@dimen/font_12"
+        app:leftTextVisibility="true"
+        app:rightIconVisibility="false"
+        app:rightTextColor="@color/white"
+        app:rightTextSize="@dimen/font_12"
+        app:rightTextVisibility="false"
+        app:titleColor="@color/white"/>
+    <TextView
+        android:id="@+id/toolbar_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px" />
 
-        <TextView
-            android:id="@+id/toolbar_tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingRight="@dimen/hight_8"
-            android:text=""
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="normal" />
-    </android.support.v7.widget.Toolbar>
-</FrameLayout >
+</LinearLayout>

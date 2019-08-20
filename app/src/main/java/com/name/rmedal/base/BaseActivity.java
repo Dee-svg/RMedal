@@ -1,18 +1,24 @@
 package com.name.rmedal.base;
 
 
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.view.MenuItem;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.widget.LinearLayout;
 
-import com.gw.swipeback.SwipeBackLayout;
-import com.name.rmedal.BuildConfig;
-import com.veni.tools.base.ActivityBase;
-import com.veni.tools.base.BasePresenter;
-import com.veni.tools.base.TUtil;
-import com.veni.tools.baserx.RxManager;
-import com.veni.tools.interfaces.AntiShake;
+import com.name.rmedal.R;
+import com.name.rmedal.modelbean.UserBean;
+import com.name.rmedal.tools.AppTools;
+import com.veni.tools.base.mvp.BasePresenter;
+import com.veni.tools.base.ui.ActivityBase;
+import com.veni.tools.util.DataUtils;
+import com.veni.tools.util.PermissionsUtils;
+import com.veni.tools.widget.TitleView;
 
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -20,129 +26,78 @@ import butterknife.ButterKnife;
  * 当前类注释:
  * 基类Activity
  */
-public abstract class BaseActivity<T extends BasePresenter> extends ActivityBase {
+public abstract class BaseActivity<T extends BasePresenter> extends ActivityBase<T> {
 
-    public T mPresenter;//Presenter 对象
-    protected RxManager mRxManager;//Rxjava管理
-    protected SwipeBackLayout swipeBackLayout;//侧滑退出
-    protected String TAG;
-    protected AntiShake antiShake;//防止重复点击
+    @Nullable
+    @BindView(R.id.toolbar_title_view)
+    TitleView toolbarTitleView;
+    @Nullable
+    @BindView(R.id.toolbar_title_ll)
+    LinearLayout toolbarTitleLl;
 
-    /*********************子类实现*****************************/
-    //获取布局文件
-    public abstract int getLayoutId();
-
-    //简单页面无需mvp就不用管此方法即可,完美兼容各种实际场景的变通
-    public abstract void initPresenter();
-
-    //初始化view
-    public abstract void initView(Bundle savedInstanceState);
+    public boolean enabledlocation = false;//定位权限
+    public UserBean userBean;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        doBeforeSetcontentView();
-        if (getLayoutId() != 0) {
-            setContentView(getLayoutId());
-        }
+    public void doAfterContentView() {
+        super.doAfterContentView();
         ButterKnife.bind(this);
-        doAfterSetcontentView();
-        this.initPresenter();
-        this.initView(savedInstanceState);
-    }
-
-    /**
-     * 设置layout前配置
-     */
-    private void doBeforeSetcontentView() {
-        mRxManager = new RxManager();
-        antiShake = new AntiShake();
-        // 设置竖屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-
-    /**
-     * 设置layout后配置
-     */
-    private void doAfterSetcontentView() {
-        mPresenter = TUtil.getT(this, 0);
-        if (mPresenter != null) {
-            mPresenter.mContext = this;
-        }
-        TAG = context.getClass().getSimpleName();
-        setSwipeBackLayout(-1);
-    }
-
-    /**
-     * 支持滑动返回
-     * -1 关闭 0左滑 1 右滑 2 上滑 3下滑
-     * direction 滑动方向
-     * activity style 必须设置Theme.Swipe.Back.NoActionBar
-     */
-    public void setSwipeBackLayout(int issupswipebace/*,boolean isSwipeFromEdge*/) {
-        int direction = -1;
-        switch (issupswipebace) {
-            case 0:
-                direction = SwipeBackLayout.FROM_LEFT;
-                break;
-            case 1:
-                direction = SwipeBackLayout.FROM_RIGHT;
-                break;
-            case 2:
-                direction = SwipeBackLayout.FROM_TOP;
-                break;
-            case 3:
-                direction = SwipeBackLayout.FROM_BOTTOM;
-                break;
-        }
-        if (direction != -1) {
-            if(swipeBackLayout == null){
-                swipeBackLayout = new SwipeBackLayout(this);
-                swipeBackLayout.attachToActivity(this);
-                swipeBackLayout.setMaskAlpha(125);
-                swipeBackLayout.setSwipeBackFactor(0.5f);
-            }
-            swipeBackLayout.setDirectionMode(direction);
-            swipeBackLayout.setSwipeFromEdge(false);//是否只能从边缘滑动退出
-        }
+        upToolBarLeftFinish();
+        userBean = AppTools.getUserBean(context);
+        immersive(toolbarTitleView, false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //debug版本不统计crash
-        if (!BuildConfig.LOG_DEBUG) {
-            //统计
+        userBean = AppTools.getUserBean(context);
+    }
+
+    public void upToolBarLeftFinish(){
+        if (toolbarTitleView != null) {
+            toolbarTitleView.setLeftIconVisibility(true);
+            toolbarTitleView.setLeftTextVisibility(true);
+            //设置返回点击事件
+            toolbarTitleView.setLeftFinish(context);
         }
     }
 
+    public void chickLocation() {
+        List<String> permissionList = PermissionsUtils.with(context)
+                .addPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                .addPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .initPermission();
+        enabledlocation = DataUtils.isEmpty(permissionList)
+                || (!permissionList.contains(Manifest.permission.ACCESS_COARSE_LOCATION)
+                && !permissionList.contains(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+
+
+    /*
+     * 注册权限申请回调
+     *
+     * @param requestCode  申请码
+     * @param permissions  申请的权限
+     * @param grantResults 结果
+     * */
     @Override
-    protected void onPause() {
-        super.onPause();
-        //debug版本不统计crash
-        if (!BuildConfig.LOG_DEBUG) {
-            //统计
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                //grantResults[i] == PackageManager.PERMISSION_DENIED 拒绝权限
+                //grantResults[i] == PackageManager.PERMISSION_GRANTED 通过权限
+                if (permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    if (!enabledlocation) {
+                        enabledlocation = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                    }
+                } else if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    if (!enabledlocation) {
+                        enabledlocation = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                    }
+                }
+            }
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.onDestroy();
-        }
-        if (mRxManager != null) {
-            mRxManager.clear();
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 }

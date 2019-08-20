@@ -1,18 +1,14 @@
 package com.name.rmedal.ui.main;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.ImageView;
-
+import android.widget.TextView;
 
 import com.name.rmedal.R;
-import com.name.rmedal.api.AppConstant;
 import com.name.rmedal.base.BaseActivity;
-import com.veni.tools.ACache;
-import com.veni.tools.LogTools;
-import com.veni.tools.SPTools;
-import com.veni.tools.StatusBarTools;
-import com.veni.tools.base.ActivityJumpOptionsTool;
+import com.name.rmedal.ui.AppConstant;
+import com.veni.tools.util.ACache;
+import com.veni.tools.util.SPUtils;
 
 import butterknife.BindView;
 import cn.bingoogolapple.bgabanner.BGABanner;
@@ -29,17 +25,8 @@ public class FirstStartActivity extends BaseActivity {
     BGABanner mBackgroundBanner;
     @BindView(R.id.banner_guide_foreground)
     BGABanner mForegroundBanner;
-
-    /**
-     * 启动入口
-     */
-    public static void startAction(Context context) {
-        new ActivityJumpOptionsTool().setContext(context)
-                .setClass(FirstStartActivity.class)
-                .setFinish(true)
-                .customAnim()
-                .start();
-    }
+    @BindView(R.id.tv_guide_skip)
+    TextView tvGuideSkip;
 
     @Override
     public int getLayoutId() {
@@ -53,8 +40,9 @@ public class FirstStartActivity extends BaseActivity {
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        //设置沉侵状态栏
-        StatusBarTools.immersive(this);
+        swipeDragToClose();
+        immersive(null,false);
+        barPaddingSmart(tvGuideSkip);
         //设置进入主页的监听
         setListener();
         //设置图片
@@ -75,8 +63,8 @@ public class FirstStartActivity extends BaseActivity {
 
                 //设置标识表示app不再是第一次启动,我为了测试,数据有效期为一天,实际可以将ACache.TIME_DAY去掉,也可以用SPTools,对应的也的做出相应修改
                 ACache.get(context).put(AppConstant.FIRST_TIME, "true", ACache.TIME_DAY);
-                SPTools.put(context, AppConstant.FIRST_TIME, false);
-                MainActivity.startAction(context);
+                SPUtils.put(context, AppConstant.FIRST_TIME, false);
+                startActivityFinish(LoginActivity.class);
             }
         });
     }

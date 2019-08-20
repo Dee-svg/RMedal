@@ -2,10 +2,9 @@ package com.name.rmedal.api;
 
 import android.content.Context;
 import android.os.NetworkOnMainThreadException;
-import android.support.annotation.CallSuper;
 
-import com.veni.tools.JsonTools;
-import com.veni.tools.LogTools;
+import com.veni.tools.LogUtils;
+import com.veni.tools.util.JsonUtils;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -30,14 +29,13 @@ import retrofit2.HttpException;
  * public void _onNext(Bean data) {
  * //处理返回数据,根据需要返回给页面
  * }
- * public void _onError(int code, String message) {
+ * public void _onError(int code, String message, boolean issuccess) {
  * //处理异常数据
- * mView.onError(code, message);
+ *  mView.onErrorSuccess(code, message, issuccess,false);
  * }
  * });
  */
 public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
-    private Context context;
     private final int RESPONSE_FATAL_EOR = -1;//返回数据失败,严重的错误
     private int errorCode = -1111;//错误码
     private String errorMsg = "未知的错误！";//错误信息
@@ -46,33 +44,34 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
     /**
      * 构造方法
      * 无加载弹窗
+     * 显示返回提示信息
      */
-    public RxSubscriber(Context context) {
-        this.context = context;
+    public RxSubscriber() {
     }
 
     /**
      * 构造方法
+     * 不显示返回提示信息
      * 有加载弹窗
-     * loadmsg可为空
+     *@param loadmsg loadmsg可为空
      * 具体在RxHttpTipLoadDialog设置
      */
     public RxSubscriber(Context context, String loadmsg) {
-        this.context = context;
-        RxHttpTipLoadDialog.getHttpTipLoadDialog().showDialog(context, loadmsg);
+        HttpTipLoadDialog.getHttpTipLoadDialog().showDialog(context, loadmsg);
     }
 
     /*抽象方法*/
     public abstract void _onNext(T t);
 
     /*抽象方法
-    * 需要在 onError中同意处理异常 则可以写成
-    * @CallSuper
-    * public void _onError(int code, String message){
-    * //要统一处理的异常
-    *  }
-    */
-    public abstract void _onError(int code, String message);
+     * 需要在 onError中同意处理异常 则可以写成
+     * @CallSuper
+     * public void _onError(int code, String message){
+     * //要统一处理的异常
+     *  }
+     */
+    public abstract void onErrorSuccess(int code, String message, boolean issuccess);
+//    public abstract void _onError(int code, String message);
 
     @Override
     public void onSubscribe(Disposable d) {
@@ -85,14 +84,17 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
     @Override
     public void onNext(HttpRespose<T> response) {
         disposeIt();
-        LogTools.e("Observer.onNext", JsonTools.toJson(response));
+        LogUtils.eTag("Observer.onNext", JsonUtils.toJson(response));
         //服务器返回对应的code码
         if (response.success()) {
             // 这里拦截一下使用测试
-            _onNext(response.getData());
-        } else {
-            _onError(response.getCode(), response.getMsg());
+            _onNext(response.getResult());
         }
+//        else {
+//            _onError(response.getCode(), response.getMsg());
+//        }
+
+        onErrorSuccess(response.getCode(), response.getMessage(),response.success());
     }
 
     /**
@@ -100,7 +102,7 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
      */
     @Override
     public void onError(Throwable t) {
-        LogTools.e("Observer.java", t.getMessage() + "");
+        LogUtils.eTag("Observer.java", t.getMessage() + "");
         disposeIt();
         if (t instanceof HttpException) {
             HttpException httpException = (HttpException) t;
@@ -132,7 +134,7 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
             errorCode = RESPONSE_FATAL_EOR;
             errorMsg = "运行时错误" + t.toString();
         }
-        _onError(errorCode, errorMsg);
+        onErrorSuccess(errorCode, errorMsg,false);
     }
 
     @Override
@@ -144,7 +146,7 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
      * 销毁disposable
      */
     private void disposeIt() {
-        RxHttpTipLoadDialog.getHttpTipLoadDialog().dismissDialog();
+        HttpTipLoadDialog.getHttpTipLoadDialog().dismissDialog();
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
             disposable = null;
@@ -162,13 +164,13 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
         try {      //我们的项目需要的UniCode转码 ,!!!!!!!!!!!!!!
             errorBodyStr = TextConvertUtils.convertUnicode(httpException.response().errorBody().string());
         } catch (IOException ioe) {
-            LogTools.e("errorBodyStr ioe:", ioe.toString());
+            LogUtils.eTag("errorBodyStr ioe:", ioe.toString());
         }
         try {
-            HttpRespose errorResponse = JsonTools.parseObject(errorBodyStr, HttpRespose.class);
+            HttpRespose errorResponse = JsonUtils.parseObject(errorBodyStr, HttpRespose.class);
             if (null != errorResponse) {
                 errorCode = errorResponse.getCode();
-                errorMsg = errorResponse.getMsg();
+                errorMsg = errorResponse.getMessage();
             }
         } catch (Exception jsonException) {
             jsonException.printStackTrace();

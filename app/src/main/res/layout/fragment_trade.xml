@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whitesmoke"
+    android:background="@color/windows_bg"
     android:orientation="vertical">
 
-    <com.veni.tools.view.TitleView
-        android:id="@+id/trade_title_view"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_toolbar_primary"
-        app:leftIconVisibility="false"
-        app:title="添加购物车"
-        app:titleColor="@color/white" />
+    <include layout="@layout/layout_toolbar" />
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/trade_refreshlayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        app:srlAccentColor="@android:color/white"
-        app:srlEnableHeaderTranslationContent="true"
-        app:srlEnableNestedScrolling="true"
-        app:srlEnablePreviewInEditMode="true"
-        app:srlPrimaryColor="@color/colorPrimary">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.name.rmedal.widget.cardslide.CardSlidePanel
+            android:id="@+id/trade_cardgroup"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            card:bottomMarginTop="38dp"
+            card:itemMarginTop="10dp"
+            card:yOffsetStep="13dp" />
+
+        <com.veni.tools.widget.ticker.TickerView
+            android:id="@+id/trade_made_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:textColor="@color/deep_gray"
+            android:textSize="50sp"
+            app:ticker_animationDuration="500" />
 
-            <com.veni.tools.view.ticker.TickerView
-                android:id="@+id/trade_made_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/darkgray"
-                android:textSize="50sp"
-                app:ticker_animationDuration="500" />
-
-            <com.veni.tools.view.ShoppingView
-                android:id="@+id/trade_sv_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                app:sv_bg_color="#CD5555"
-                app:sv_text="点击购买" />
-        </LinearLayout>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        <com.veni.tools.widget.ShoppingView
+            android:id="@+id/trade_sv_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            app:sv_bg_color="#CD5555"
+            app:sv_text="点击购买" />
+    </LinearLayout>
 
 </LinearLayout>

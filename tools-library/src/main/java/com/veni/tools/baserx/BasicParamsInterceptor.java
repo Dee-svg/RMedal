@@ -1,8 +1,5 @@
 package com.veni.tools.baserx;
 
-import com.veni.tools.JsonTools;
-import com.veni.tools.LogTools;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +22,7 @@ public class BasicParamsInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(Interceptor.Chain chain) throws IOException {
-        LogTools.d("HttpCommonInterceptor", "add common params--"+ JsonTools.toJson(mHeaderParamsMap));
+    public Response intercept(Chain chain) throws IOException {
         Request oldRequest = chain.request();
         // 添加新的参数，添加到url 中
      /* HttpUrl.Builder authorizedUrlBuilder = oldRequest.url()                .newBuilder()
@@ -44,6 +40,10 @@ public class BasicParamsInterceptor implements Interceptor {
             }
         }
         Request newRequest = requestBuilder.build();
+
+        //把统一拦截的header 打印出来
+        new MyHttpLoggingInterceptor().logInterceptorHeaders(newRequest);
+
         return chain.proceed(newRequest);
     }
 

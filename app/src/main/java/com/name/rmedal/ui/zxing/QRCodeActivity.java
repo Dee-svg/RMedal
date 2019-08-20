@@ -1,9 +1,9 @@
 package com.name.rmedal.ui.zxing;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -13,20 +13,23 @@ import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.name.rmedal.R;
-import com.name.rmedal.api.AppConstant;
 import com.name.rmedal.base.BaseActivity;
-import com.name.rmedal.tools.zxing.QrBarDecoder;
-import com.name.rmedal.tools.zxing.QrBarEncoder;
-import com.veni.tools.ACache;
-import com.veni.tools.DataTools;
-import com.veni.tools.ImageTools;
-import com.veni.tools.LogTools;
-import com.veni.tools.StatusBarTools;
-import com.veni.tools.base.ActivityJumpOptionsTool;
-import com.veni.tools.view.TitleView;
-import com.veni.tools.view.ToastTool;
-import com.veni.tools.view.ticker.TickerUtils;
-import com.veni.tools.view.ticker.TickerView;
+import com.name.rmedal.ui.AppConstant;
+import com.name.rmedal.ui.zxing.android.CaptureActivity;
+import com.name.rmedal.ui.zxing.bean.ZxingConfig;
+import com.name.rmedal.ui.zxing.common.Constant;
+import com.name.rmedal.ui.zxing.decode.DecodeImgCallback;
+import com.name.rmedal.ui.zxing.decode.DecodeImgThread;
+import com.name.rmedal.ui.zxing.encode.CodeCreator;
+import com.veni.tools.LogUtils;
+import com.veni.tools.util.ACache;
+import com.veni.tools.util.ClipboardUtils;
+import com.veni.tools.util.DataUtils;
+import com.veni.tools.util.ImageUtils;
+import com.veni.tools.util.ToastTool;
+import com.veni.tools.widget.TitleView;
+import com.veni.tools.widget.ticker.TickerUtils;
+import com.veni.tools.widget.ticker.TickerView;
 
 import java.util.Random;
 
@@ -40,8 +43,8 @@ import butterknife.OnClick;
  */
 public class QRCodeActivity extends BaseActivity {
 
-    @BindView(R.id.qrcode_title_view)
-    TitleView qrcodeTitleView;
+    @BindView(R.id.toolbar_title_view)
+    TitleView toolbarTitleView;
     @BindView(R.id.qrcode_create_count)
     TickerView qrcodeCreateCount;//生成二维码次数
     @BindView(R.id.qrcode_scaner_count)
@@ -50,16 +53,6 @@ public class QRCodeActivity extends BaseActivity {
     ImageView qrcodeCreateCodeiv;
     @BindView(R.id.qrcode_create_codetip)
     TextView qrcodeCreateCodetip;
-
-    /**
-     * 启动入口
-     */
-    public static void startAction(Context context) {
-        new ActivityJumpOptionsTool().setContext(context)
-                .setClass(QRCodeActivity.class)
-                .customAnim()
-                .start();
-    }
 
     @Override
     public int getLayoutId() {
@@ -81,16 +74,9 @@ public class QRCodeActivity extends BaseActivity {
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        //设置沉侵状态栏
-        StatusBarTools.immersive(this);
-        //增加状态栏的高度
-        StatusBarTools.setPaddingSmart(this, qrcodeTitleView);
-        //设置返回点击事件
-        qrcodeTitleView.setLeftFinish(context);
         //设置显示标题
-        qrcodeTitleView.setTitle("二维码");
-        //设置侧滑退出
-        setSwipeBackLayout(0);
+        toolbarTitleView.setTitle(R.string.show_qrcode);
+
         Object cc = ACache.get(context).getAsObject(AppConstant.CreateCount);
         Object sc = ACache.get(context).getAsObject(AppConstant.ScanerCount);
         create_count = cc == null ? 0 : (int) cc;
@@ -109,9 +95,18 @@ public class QRCodeActivity extends BaseActivity {
         if (antiShake.check(view.getId())) return;
         switch (view.getId()) {
             case R.id.qrcode_scaner_ll://扫码
-                Intent intent = new Intent();
-                intent.setClass(context, ScanerCodeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                Intent intent =new Intent(context, CaptureActivity.class);
+
+                ZxingConfig config = new ZxingConfig();
+                config.setPlayBeep(true);//是否播放扫描声音 默认为true
+                config.setShake(true);//是否震动  默认为true
+                config.setDecodeBarCode(true);//是否扫描条形码 默认为true
+//                                config.setReactColor(R.color.colorAccent);//设置扫描框四个角的颜色 默认为白色
+//                                config.setFrameLineColor(R.color.colorAccent);//设置扫描框边框颜色 默认无色
+//                                config.setScanLineColor(R.color.colorAccent);//设置扫描线的颜色 默认白色
+                config.setFullScreenScan(false);//是否全屏扫描  默认为true  设为false则只会在扫描框中扫描
+                intent.putExtra(Constant.INTENT_ZXING_CONFIG, config);
                 startActivityForResult(intent, AppConstant.REQUEST_QRCODE);
                 break;
             case R.id.qrcode_create_qr://生成二维码
@@ -119,15 +114,20 @@ public class QRCodeActivity extends BaseActivity {
                 /*
                  * 生成二维码
                  * 1 边长必须 >=  151像素
-                 * 否则生成的图片无法识别
+                 * 否则生成的图片有可能无法识别
                  */
-                create_bitmap = QrBarEncoder.builder(getCharAndNumr(100)).
-                        backColor(getResources().getColor(R.color.white)).
-                        codeColor(getResources().getColor(R.color.black)).
-                        codeFormat(QrBarEncoder.Type.QR).
-                        codeWidth(qr_math).
-                        codeHeight(qr_math).
-                        into(qrcodeCreateCodeiv);
+
+                Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                create_bitmap = CodeCreator.builder(context)
+                        .encode(getCharAndNumr(100))
+                        .backColor(R.color.white)
+                        .codeColor(R.color.black)
+                        .codeFormat(CodeCreator.Type.QR)
+                        .codeWidth(qr_math)
+                        .codeHeight(qr_math)
+                        .logo(logo)
+                        .into(qrcodeCreateCodeiv);;
+
                 upCreateData();
                 break;
             case R.id.qrcode_create_bar:
@@ -136,16 +136,17 @@ public class QRCodeActivity extends BaseActivity {
                  * 1 宽必须大于高
                  * 2 宽必须 >= 510像素
                  *   宽 等于510像素时 高必须小于宽的1/2
-                 * 否则生成的图片无法识别
+                 * 否则生成的图片有可能无法识别
                  */
                 qrcodeCreateCodetip.setText("↓↓长按图片识别条形码↓↓");
-                create_bitmap = QrBarEncoder.builder(getCharAndNumr(18)).
-                        backColor(getResources().getColor(R.color.white)).
-                        codeColor(getResources().getColor(R.color.black)).
-                        codeFormat(QrBarEncoder.Type.Bar).
-                        codeWidth(bar_width).
-                        codeHeight(bar_height).
-                        into(qrcodeCreateCodeiv);
+                create_bitmap = CodeCreator.builder(context)
+                        .encode(getCharAndNumr(18))
+                        .backColor(R.color.white)
+                        .codeColor(R.color.black)
+                        .codeFormat(CodeCreator.Type.Bar)
+                        .codeWidth(bar_width)
+                        .codeHeight(bar_height)
+                        .into(qrcodeCreateCodeiv);
                 upCreateData();
                 break;
         }
@@ -161,12 +162,18 @@ public class QRCodeActivity extends BaseActivity {
                     return false;
                 }
                 // 开始对图像资源解码
-                Result rawResult = QrBarDecoder.decodeFromPhoto(create_bitmap);
-                if (rawResult != null) {
-                    initDialogResult(rawResult);
-                } else {
-                    ToastTool.error("图片识别失败!");
-                }
+                new DecodeImgThread(create_bitmap, new DecodeImgCallback() {
+                    @Override
+                    public void onImageDecodeSuccess(Result result) {
+                        initDialogResult(result);
+                    }
+
+                    @Override
+                    public void onImageDecodeFailed() {
+                        ToastTool.error(R.string.scan_failed_tip);
+                    }
+                }).run();
+
                 return true;
             }
         });
@@ -178,8 +185,8 @@ public class QRCodeActivity extends BaseActivity {
                         //只需要获取一次高度，获取后移除监听器
                         qrcodeCreateCodeiv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                         //这里高度应该定义为成员变量，定义为局部为展示代码方便
-                        bar_height = qrcodeCreateCodeiv.getHeight() - ImageTools.dpToPx(context, 20);
-                        bar_width = qrcodeCreateCodeiv.getWidth() - ImageTools.dpToPx(context, 20);
+                        bar_height = qrcodeCreateCodeiv.getHeight() - ImageUtils.dpToPx(context, 20);
+                        bar_width = qrcodeCreateCodeiv.getWidth() - ImageUtils.dpToPx(context, 20);
                         initQrBarHeight();
                     }
                 });
@@ -238,11 +245,11 @@ public class QRCodeActivity extends BaseActivity {
         BarcodeFormat type = result.getBarcodeFormat();
         String realContent = result.getText();
         if (BarcodeFormat.QR_CODE.equals(type)) {//二维码扫描结果
-            LogTools.v("二维码", realContent);
+            LogUtils.v("二维码", realContent);
         } else if (BarcodeFormat.EAN_13.equals(type)) {//条形码扫描结果
-            LogTools.v("条形码", realContent);
+            LogUtils.v("条形码", realContent);
         } else {//扫描结果
-            LogTools.v("扫描结果", "type---" + type + "--realContent--" + realContent);
+            LogUtils.v("扫描结果", "type---" + type + "--realContent--" + realContent);
         }
         if (realContent.equals("")) {
             ToastTool.error("扫描失败!");
@@ -257,7 +264,7 @@ public class QRCodeActivity extends BaseActivity {
         upTickerViews();
     }
 
-    private void upScanerData(String zxqrcode) {
+    private void upScanerData(final String zxqrcode) {
         scaner_count++;
         ACache.get(context).put(AppConstant.ScanerCount, scaner_count);
         creatDialogBuilder()
@@ -265,7 +272,14 @@ public class QRCodeActivity extends BaseActivity {
                 .setDialog_message(zxqrcode)
                 .setDialog_Left("确定")
                 .setDialog_Right("取消")
-                .setCancelable(true)
+                .setLeftlistener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToastTool.success("扫描结果已复制到剪切板");
+                        ClipboardUtils.copyText(context,zxqrcode);
+                    }
+                })
+                .setCancelableOutside(true)
                 .builder().show();
         upTickerViews();
     }
@@ -301,15 +315,15 @@ public class QRCodeActivity extends BaseActivity {
                 if (bundle != null) {
                     zxqrcode = bundle.getString("result");
                 }
-                LogTools.e(TAG, "" + zxqrcode);
-                if (!DataTools.isNullString(zxqrcode)) {
+                LogUtils.eTag(TAG, "" + zxqrcode);
+                if (!DataUtils.isNullString(zxqrcode)) {
                     upScanerData(zxqrcode);
                 } else {
                     ToastTool.success("扫描失败!");
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) { // User canceled.
-            LogTools.e(TAG, " User canceled.");
+            LogUtils.eTag(TAG, " User canceled.");
         }
     }
 }

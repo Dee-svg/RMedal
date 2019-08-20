@@ -1,11 +1,12 @@
 package com.name.rmedal.ui.main.contract;
 
 
-import com.name.rmedal.modelbean.PersonalModelBean;
-import com.veni.tools.base.BasePresenter;
-import com.veni.tools.base.BaseView;
+import com.name.rmedal.modelbean.CheckVersionBean;
+import com.name.rmedal.modelbean.UserBean;
+import com.veni.tools.base.mvp.BasePresenter;
+import com.veni.tools.base.mvp.BaseView;
 
-import java.util.List;
+import java.io.File;
 
 
 /**
@@ -20,8 +21,18 @@ public interface MainContract {
      *  页面中实现这个  View 接口
      */
     interface View extends BaseView {
-        //注册返回的数据
-        void returnVersionData(List<PersonalModelBean> data);
+        //返回的数据
+        void return_UserData(UserBean data);
+
+        void returnVersionData(CheckVersionBean data);
+
+        void onStartDownload(long length);
+
+        void onDownLoadProgress(int progress);
+
+        void onDownLoadCompleted(File file);
+
+        void onDownLoadError(String msg);
     }
     /**
      * 发起请求
@@ -29,8 +40,12 @@ public interface MainContract {
      *   调用Model获取网络数据，用View中的接口  更新界面
      */
     abstract static class Presenter extends BasePresenter<View> {
-        //发起注册请求
-        public abstract void checkVersion(String type);
+        //发起请求
+        public abstract void getUserData(String userid);
+
+        public abstract void checkVersion(String version);
+
+        public abstract void download(String url);
     }
 
 }

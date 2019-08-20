@@ -1,20 +1,39 @@
 <resources>
-    <!-- Base application theme. -->
+
+
+    <!-- 右滑退出能看见桌面,使用该主题
+    设置windowIsTranslucent false
+    但是 System.exit(0) 会黑屏
+    要用ActivityManager.killBackgroundProcesses(getPackageName())
+    笑哭-->
     <style name="AppTheme" parent="ThemeBase">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <!-- 界面不沉浸到状态栏下方
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);-->
-        <!--<item name="android:fitsSystemWindows">true</item>-->
 
+        <!--沉浸栏禁止设置
+        <item name="android:fitsSystemWindows">true</item>-->
+        <!-- 以下属性StatusBarUtils 中已经做处理-->
+        <!--<item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!-->api 19这个属性设置为false-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+
+        <!--Android 5.x导航栏会呈现系统默认的浅灰色-->
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
+
+    <!--防侧滑黑屏，使用该主题-->
     <style name="AppTheme.SwipeBack">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="ZxingTheme" parent="AppTheme.SwipeBack">
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
     <!--避免第一次进来白屏或黑屏-->
-    <style name="AppTheme.Fullscreen" parent="AppTheme">
+    <style name="AppTheme.Fullscreen">
         <item name="android:windowFullscreen">true</item><!--状态栏隐藏-->
         <item name="android:windowContentOverlay">@null</item>
     </style>
@@ -45,7 +64,7 @@
         <!-- 提示文案的文字颜色 -->
         <item name="banner_tipTextColor">@android:color/white</item>
         <!-- 加载网络数据时覆盖在BGABanner最上层的占位图 -->
-        <item name="banner_placeholderDrawable">@drawable/ic_image_loading</item>
+        <item name="banner_placeholderDrawable">@mipmap/ic_holder_imageload</item>
         <!-- 页面切换的动画效果 defaultEffect    alpha  rotate   cube    flip    accordion
             zoomFade     fade    zoomCenter  zoomStack   stack   depth  zoom-->
         <item name="banner_transitionEffect">alpha</item>
@@ -57,5 +76,71 @@
         <item name="banner_numberIndicatorTextSize">10sp</item>
         <!-- 数字指示器背景 -->
         <item name="banner_numberIndicatorBackground">@drawable/bga_banner_point_enabled</item>
+        <!-- 宽高比例，如果大于 0，则会根据宽度来计算高度，否则使用 android:layout_height 指定的高度 -->
+        <item name="banner_aspectRatio">1.3</item>
+        <!-- 占位图和资源图片缩放模式 -->
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="SmartRefreshLayoutDefaultStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+        <!--padding非空的时候，viewgroup会根据padding值来裁剪子view （默认true）-->
+        <item name="android:clipToPadding">false</item>
+        <!--子view比parent大的时候，是否裁剪 （默认true）-->
+        <item name="android:clipChildren">false</item>
+        <!--主题颜色 背景色-->
+        <item name="srlPrimaryColor">@color/color_refresh</item>
+        <!--强调颜色 背景字体色-->
+        <item name="srlAccentColor">@color/color_refresh_text</item>
+        <!--释放后回弹动画时长（默认250毫秒）-->
+        <item name="srlReboundDuration">300</item>
+        <!--显示拖动高度/真实拖动高度（默认0.5，阻尼效果）-->
+        <item name="srlDragRate">0.5</item>
+        <!--Header最大拖动高度/Header标准高度（默认2，要求>=1）-->
+        <item name="srlHeaderMaxDragRate">2</item>
+        <!--Footer最大拖动高度/Footer标准高度（默认2，要求>=1）-->
+        <item name="srlFooterMaxDragRate">2</item>
+        <!--HeaderHeight 的比率（默认1）-->
+        <item name="srlHeaderTriggerRate">1</item>
+        <!--Footer触发加载距离 与 FooterHeight 的比率（默认1）-->
+        <item name="srlFooterTriggerRate">1</item>
+        <!--是否开启下拉刷新功能（默认true）-->
+        <item name="srlEnableRefresh">true</item>
+        <!--是否开启加上拉加载功能（默认false-智能开启）-->
+        <item name="srlEnableLoadMore">false</item>
+        <!--是否监听列表惯性滚动到底部时触发加载事件（默认true）-->
+        <item name="srlEnableAutoLoadMore">true</item>
+        <!--拖动Header的时候是否同时拖动内容（默认true）-->
+        <item name="srlEnableHeaderTranslationContent">true</item>
+        <!--拖动Footer的时候是否同时拖动内容（默认true）-->
+        <item name="srlEnableFooterTranslationContent">true</item>
+        <!--是否在编辑模式时显示预览效果（默认true）-->
+        <item name="srlEnablePreviewInEditMode">true</item>
+        <!--是否开启纯滚动模式（默认false-开启时只支持一个子视图）-->
+        <item name="srlEnablePureScrollMode">false</item>
+        <!--是否启用越界拖动（仿苹果效果）V1.0.4-->
+        <item name="srlEnableOverScrollDrag">true</item>
+        <!--设置是否开启越界回弹功能（默认true）-->
+        <item name="srlEnableOverScrollBounce">true</item>
+        <!--是否开启嵌套滚动NestedScrolling(默认false-智能开启)-->
+        <item name="srlEnableNestedScrolling">true</item>
+        <!--是否在加载完成之后滚动内容显示新数据（默认-true）-->
+        <item name="srlEnableScrollContentWhenLoaded">true</item>
+        <!--是否在刷新成功之后滚动内容显示新数据（默认-true）-->
+        <item name="srlEnableScrollContentWhenRefreshed">true</item>
+        <!--在内容不满一页的时候，是否可以上拉加载更多（默认-false）-->
+        <item name="srlEnableLoadMoreWhenContentNotFull">false</item>
+        <!--是否在全部加载结束之后Footer跟随内容-->
+        <item name="srlEnableFooterFollowWhenLoadFinished">false</item>
+        <!--是否剪裁Header当时样式为FixedBehind时V1.0.5-->
+        <item name="srlEnableClipHeaderWhenFixedBehind">false</item>
+        <!--是否剪裁Footer当时样式为FixedBehind时V1.0.5-->
+        <item name="srlEnableClipFooterWhenFixedBehind">false</item>
+        <!--是否在刷新的时候禁止内容的一切手势操作（默认false）-->
+        <item name="srlDisableContentWhenRefresh">false</item>
+        <!--是否在加载的时候禁止内容的一切手势操作（默认false）-->
+        <item name="srlDisableContentWhenLoading">false</item>
     </style>
 </resources>

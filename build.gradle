@@ -1,26 +1,76 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-apply from: "config.gradle"
 buildscript {
+    // app 相关版本控制
+    ext.versions = ['compileSdk'  : 28,
+                    'minSdk'      : 16,
+                    'androidTools': '28.0.3',]
+
+    ext.deps = [
+            support     : [
+                    appcompat   : 'com.android.support:appcompat-v7:28.0.0',
+                    design      : 'com.android.support:design:28.0.0',
+                    recycler    : 'com.android.support:recyclerview-v7:28.0.0',
+                    cardview    : 'com.android.support:cardview-v7:28.0.0',
+                    support_v4  : 'com.android.support:support-v4:28.0.0',
+                    annotations : 'com.android.support:support-annotations:28.0.0',
+                    constraint  : 'com.android.support.constraint:constraint-layout:1.0.2',
+                    multidex    : 'com.android.support:multidex:1.0.3',
+            ],
+            retrofit    : [
+                    retrofit : 'com.squareup.retrofit2:retrofit:2.6.0',
+                    converter: 'com.squareup.retrofit2:converter-gson:2.6.0',
+                    adapter  : 'com.squareup.retrofit2:adapter-rxjava2:2.6.0',
+            ],
+            rx          : [
+                    java   : 'io.reactivex.rxjava2:rxjava:2.2.9',
+                    android: 'io.reactivex.rxjava2:rxandroid:2.1.1',
+            ],
+            okhttp      : [
+                    logging: 'com.squareup.okhttp3:logging-interceptor:3.8.1',
+            ],
+            zxing       : 'com.google.zxing:core:3.3.3',
+            butterknife : 'com.jakewharton:butterknife:8.8.1',
+            knife_compil: 'com.jakewharton:butterknife-compiler:8.8.1',
+            glide       : 'com.github.bumptech.glide:glide:4.9.0',
+            ahbnaviga   : 'com.aurelhubert:ahbottomnavigation:2.1.0',//2.3.4  AndroidX
+            bga_banner  : 'cn.bingoogolapple:bga-banner:2.2.6',
+            svg         : 'com.jaredrummler:animated-svg-view:1.0.5',
+            greendao    : 'org.greenrobot:greendao:3.2.2',
+            greendao_gen: 'org.greenrobot:greendao-generator:3.2.2',
+            wheelPicker : 'com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.6.20181018',
+            wechat      : 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+',
+            mpChart     : 'com.github.PhilJay:MPAndroidChart:v3.1.0',
+            rebound     : 'com.facebook.rebound:rebound:0.3.8',
+    ]
+
     repositories {
-        jcenter()
         google()
+        jcenter()
+        //GreenDao数据库
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.4.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        //GreenDao数据库
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+//        classpath rootProject.ext.deps.greendao
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
+        //图表
+        maven { url 'https://jitpack.io' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+

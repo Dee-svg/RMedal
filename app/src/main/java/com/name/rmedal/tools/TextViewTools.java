@@ -53,7 +53,7 @@ public class TextViewTools {
                 , getdrawersetbounds(right), getdrawersetbounds(bottom));
     }
 
-    private static Drawable getdrawersetbounds(Context context,int id) {
+    private static Drawable getdrawersetbounds(Context context, int id) {
         if(id==0){
             return null;
         }

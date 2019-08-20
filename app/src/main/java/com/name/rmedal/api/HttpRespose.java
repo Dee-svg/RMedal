@@ -1,19 +1,19 @@
 package com.name.rmedal.api;
 
-import java.io.Serializable;
-
 /**
  * 作者：kkan on 2017/01/30
  * 当前类注释:
- *      封装服务器返回数据
+ * 封装服务器返回数据
+ * 类中的参数是可以修改的
  */
-public class HttpRespose<T> implements Serializable {
+public class HttpRespose<T> {
+
     private int code;
-    private String msg;
-    private T data;
+    private String message;
+    private T result;
 
     public boolean success() {
-        return code==1001;
+        return code == 200;
     }
 
     public int getCode() {
@@ -24,28 +24,19 @@ public class HttpRespose<T> implements Serializable {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public T getData() {
-        return data;
+    public T getResult() {
+        return result;
     }
 
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "HttpRespose{" +
-                "code='" + code + '\'' +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
+    public void setResult(T result) {
+        this.result = result;
     }
 }

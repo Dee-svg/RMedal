@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windows_bg"
+    android:clipToPadding="true"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_toolbar"
+        tools:ignore="IncludeLayoutParam" />
+
+    <ScrollView
+        android:id="@+id/regist_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top|left|start"
+        android:layout_marginLeft="@dimen/hight_15"
+        android:layout_marginRight="@dimen/hight_15"
+        android:fillViewport="true"
+        android:scrollbarThumbVertical="@android:color/transparent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:id="@+id/regist_content_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/regist_logo_iv"
+                android:layout_width="@dimen/hight_100"
+                android:layout_height="@dimen/hight_100"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/hight_80"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher" />
+
+            <com.veni.tools.widget.ClearableEditText
+                android:id="@+id/regist_mobile_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hight_55"
+                android:background="@drawable/underline_gray"
+                android:drawableLeft="@mipmap/ic_mobile_flag"
+                android:drawableRight="@mipmap/ic_clear"
+                android:drawablePadding="@dimen/hight_15"
+                android:hint="@string/input_phone_tips"
+                android:inputType="numberSigned"
+                android:maxLength="11"
+                android:paddingLeft="@dimen/hight_15"
+                android:paddingRight="@dimen/hight_15"
+                android:singleLine="true"
+                android:textColor="@color/light_black"
+                android:textColorHint="@color/deep_gray"
+                android:textSize="@dimen/font_14"
+                app:left_drawable_color="@color/light_black"
+                app:right_drawable_color="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hight_55"
+                android:background="@drawable/underline_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.veni.tools.widget.ClearableEditText
+                    android:id="@+id/regist_captcha_et"
+                    android:layout_width="@dimen/hight_zero"
+                    android:layout_height="@dimen/hight_55"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:drawableLeft="@mipmap/ic_captcha_flag"
+                    android:drawableRight="@mipmap/ic_clear"
+                    android:drawablePadding="@dimen/hight_15"
+                    android:hint="@string/input_captcha_tips"
+                    android:inputType="numberSigned"
+                    android:maxLength="11"
+                    android:paddingLeft="@dimen/hight_15"
+                    android:paddingRight="@dimen/hight_15"
+                    android:singleLine="true"
+                    android:textColor="@color/light_black"
+                    android:textColorHint="@color/deep_gray"
+                    android:textSize="@dimen/font_14"
+                    app:left_drawable_color="@color/light_black"
+                    app:right_drawable_color="@color/gray" />
+                <com.veni.tools.widget.VerificationCodeView
+                    android:id="@+id/regist_get_vercode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/regist_get_captcha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/hight_5"
+                    android:layout_marginRight="@dimen/hight_8"
+                    android:layout_marginBottom="@dimen/hight_5"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/hight_15"
+                    android:paddingRight="@dimen/hight_15"
+                    android:text="@string/get_captcha_tips"
+                    android:textSize="@dimen/font_14" />
+            </LinearLayout>
+
+            <com.veni.tools.widget.PasswordEditText
+                android:id="@+id/regist_password_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hight_55"
+                android:background="@drawable/underline_gray"
+                android:drawableLeft="@mipmap/ic_password_flag"
+                android:drawableRight="@mipmap/ic_visibility_black"
+                android:drawablePadding="@dimen/hight_15"
+                android:hint="@string/input_pw_tips"
+                android:inputType="textPassword"
+                android:maxLength="11"
+                android:paddingLeft="@dimen/hight_15"
+                android:paddingRight="@dimen/hight_15"
+                android:singleLine="true"
+                android:textColor="@color/light_black"
+                android:textColorHint="@color/deep_gray"
+                android:textSize="@dimen/font_14"
+                app:left_drawable_color="@color/light_black"
+                app:right_drawable_color="@color/gray" />
+
+            <com.veni.tools.widget.PasswordEditText
+                android:id="@+id/regist_passwordagain_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hight_55"
+                android:background="@drawable/underline_gray"
+                android:drawableLeft="@mipmap/ic_password_flag"
+                android:drawableRight="@mipmap/ic_visibility_black"
+                android:drawablePadding="@dimen/hight_15"
+                android:hint="@string/input_pwagain_tips"
+                android:inputType="textPassword"
+                android:maxLength="11"
+                android:paddingLeft="@dimen/hight_15"
+                android:paddingRight="@dimen/hight_15"
+                android:singleLine="true"
+                android:textColor="@color/light_black"
+                android:textColorHint="@color/deep_gray"
+                android:textSize="@dimen/font_14"
+                app:left_drawable_color="@color/light_black"
+                app:right_drawable_color="@color/gray" />
+
+            <Button
+                android:id="@+id/regist_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hight_50"
+                android:layout_marginTop="@dimen/hight_20"
+                android:layout_marginBottom="@dimen/hight_10"
+                android:background="@drawable/btn_blue_selected"
+                android:text="@string/show_regist"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_18" />
+
+            <TextView
+                android:id="@+id/regist_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingLeft="@dimen/hight_10"
+                android:paddingTop="@dimen/hight_5"
+                android:paddingRight="@dimen/hight_10"
+                android:paddingBottom="@dimen/hight_5"
+                android:text="@string/regist_login"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/font_12" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -6,13 +6,7 @@
     android:background="@color/light_colorPrimary"
     android:orientation="vertical">
 
-    <com.veni.tools.view.TitleView
-        android:id="@+id/qrcode_title_view"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_toolbar_primary"
-        app:title="二维码"
-        app:titleColor="@color/white" />
+    <include layout="@layout/layout_toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,10 +26,10 @@
                 android:gravity="center"
                 android:paddingBottom="@dimen/hight_10"
                 android:text="生成次数"
-                android:textColor="@color/whitesmoke"
+                android:textColor="@color/windows_bg"
                 android:textSize="@dimen/font_14" />
 
-            <com.veni.tools.view.ticker.TickerView
+            <com.veni.tools.widget.ticker.TickerView
                 android:id="@+id/qrcode_create_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/hight_50"
             android:layout_marginTop="@dimen/hight_50"
-            android:background="@color/whitesmoke" />
+            android:background="@color/windows_bg" />
 
 
         <LinearLayout
@@ -66,10 +60,10 @@
                 android:gravity="center"
                 android:paddingBottom="@dimen/hight_10"
                 android:text="扫码次数"
-                android:textColor="@color/whitesmoke"
+                android:textColor="@color/windows_bg"
                 android:textSize="@dimen/font_14" />
 
-            <com.veni.tools.view.ticker.TickerView
+            <com.veni.tools.widget.ticker.TickerView
                 android:id="@+id/qrcode_scaner_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +77,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/hight_80"
-        android:background="@color/whitesmoke"
+        android:background="@color/windows_bg"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -101,7 +95,7 @@
                 android:drawableTop="@mipmap/ic_mobile_flag"
                 android:gravity="center"
                 android:text="扫码"
-                android:textColor="@color/deep_gray_2"
+                android:textColor="@color/light_black"
                 android:textSize="@dimen/font_14" />
         </LinearLayout>
         <LinearLayout
@@ -119,7 +113,7 @@
                 android:drawableTop="@mipmap/ic_mobile_flag"
                 android:gravity="center"
                 android:text="生成二维码"
-                android:textColor="@color/deep_gray_2"
+                android:textColor="@color/light_black"
                 android:textSize="@dimen/font_14" />
         </LinearLayout>
         <LinearLayout
@@ -137,7 +131,7 @@
                 android:drawableTop="@mipmap/ic_mobile_flag"
                 android:gravity="center"
                 android:text="生成条形码"
-                android:textColor="@color/deep_gray_2"
+                android:textColor="@color/light_black"
                 android:textSize="@dimen/font_14" />
         </LinearLayout>
 
@@ -152,13 +146,12 @@
         android:background="@color/white"
         android:gravity="center"
         android:textSize="@dimen/font_14"
-        android:textColor="@color/deep_gray_2"
+        android:textColor="@color/light_black"
         android:paddingTop="@dimen/hight_10"/>
 
     <ImageView
         android:id="@+id/qrcode_create_codeiv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

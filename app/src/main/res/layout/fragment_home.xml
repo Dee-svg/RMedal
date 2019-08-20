@@ -2,37 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/whitesmoke"
+    android:background="@color/windows_bg"
     android:orientation="vertical">
-    <com.veni.tools.view.TitleView
-        android:id="@+id/home_rxtitle"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_toolbar_primary"
-        app:leftIconVisibility="false"
-        app:title="首页"
-        app:titleColor="@color/white"/>
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/home_refreshlayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        app:srlAccentColor="@android:color/white"
-        app:srlEnableHeaderTranslationContent="true"
-        app:srlEnableNestedScrolling="true"
-        app:srlEnablePreviewInEditMode="true"
-        app:srlPrimaryColor="@color/colorPrimary">
 
-        <!--<com.scwang.smartrefresh.header.MaterialHeader-->
-        <!--android:id="@+id/header"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="?attr/actionBarSize"/>-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/home_functions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <include layout="@layout/layout_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/home_smart_refresh_layout"
+            style="@style/SmartRefreshLayoutDefaultStyle">
+
+            <!--<com.scwang.smartrefresh.header.MaterialHeader-->
+            <!--android:id="@+id/header"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="?attr/actionBarSize"/>-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/home_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        <RelativeLayout
+            android:id="@+id/home_arrow_top"
+            android:visibility="gone"
+            android:layout_width="@dimen/hight_35"
+            android:layout_height="@dimen/hight_35"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/hight_30"
+            android:layout_marginRight="@dimen/hight_15"
+            android:background="@drawable/circular_white">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_arrow_top"/>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

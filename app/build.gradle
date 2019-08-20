@@ -1,21 +1,73 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // GreenDao数据库 apply plugin
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
-
+    signingConfigs {
+        config {
+            keyAlias 'rmedalkey'
+            keyPassword 'rmedal'
+            storeFile file('../keys/rmedal.keystore')
+            storePassword 'rmedal'
+        }
+    }
+    compileSdkVersion versions.compileSdk
     defaultConfig {
-        applicationId rootProject.ext.android.applicationId
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        applicationId "com.name.rmedal"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode 1
+        versionName "1.0.0"
+        //版本名后面添加一句话，意思就是flavor dimension 它的维度就是该版本号，这样维度就是都是统一的了
+        flavorDimensions "versionCode"
         multiDexEnabled true
-
         vectorDrawables.useSupportLibrary = true
         ndk {
             //APP的build.gradle设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64'
+        }
+        //以下为默认配置,如需修改在 productFlavors 中复写
+        //取用BuildConfig.SEARCH_RADIUS
+        // string.xml下的app_name  xml中不能存在对应的key
+        resValue "string", "app_name", "Medal"
+        //搜索半径
+        buildConfigField "int", "SEARCH_RADIUS", "5"
+        //自动获取城市 true需要  false不需要
+        buildConfigField "boolean", "ACTION_COMPANY", 'false'
+        //渠道标签自定义
+        buildConfigField "String", "VIP_CHANNEL", '"酒驾酒驾酒酒驾"'
+    }
+    productFlavors {
+        //多渠道打包
+        //buildTypes.debug默认加载productFlavors中第一个（名字排序）目录
+        // 需要运行其他目录时 将其他的剪切掉后重新sync编译后即可（编译完将剪切额粘贴回去重新sync编译）
+
+        aarmedal{//放个空目录运行defaultConfig中的参数
+            applicationId "com.name.rmedal"
+        }
+        rmedala {//在src中建立对应的文件夹 res放入对应替换的资源（相同文件名） 就可实现更改替换
+            applicationId "com.name.rmedala"
+            // 替换defaultConfig中app_name
+            resValue "string", "app_name", "ARmedal"
+
+            manifestPlaceholders = [//AndroidManifest中的使用示例 ${GEO_KEY_VALUE}
+                                    //高德地图key
+                                    GEO_KEY_VALUE   : "1d1b69ddc4221ea67ee9c981a51029a4",
+                                    //调取微信的包名  与applicationId一致
+                                    //更改applicationId 后 微信在AndroidManifest获取的package 还是默认的com.name.rmedal 这里修改下
+                                    PackgeName_VALUE: "com.aatext.client"
+                                    /*
+                                    *
+                        <!-- 微信支付 -->
+                        <activity
+                            android:name=".wxapi.WXPayEntryActivity"
+                            android:launchMode="singleTop"
+                            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+                        <activity-alias
+                            android:name="${PackgeName_VALUE}.wxapi.WXPayEntryActivity"
+                            android:exported="true"
+                            android:targetActivity=".wxapi.WXPayEntryActivity" />*/
+            ]
         }
     }
     buildTypes {
@@ -31,8 +83,8 @@ android {
             //apk命名
             android.applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    //这里修改apk文件名
-                    outputFileName = "${defaultConfig.applicationId}_v${defaultConfig.versionCode}.apk"
+                    //这里修改apk文件名outputFileName = "${defaultConfig.applicationId}_v${defaultConfig.versionCode}.apk"
+                    outputFileName = "${variant.productFlavors[0].applicationId}_v${defaultConfig.versionCode}.apk"
                 }
             }
         }
@@ -41,32 +93,49 @@ android {
             minifyEnabled false
             zipAlignEnabled false
             shrinkResources false
+            // 使用config签名
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation 'junit:junit:4.12'
-    implementation project(':tools-library')
-    //下拉刷新上拉加载
-    implementation project(':recycler-adapter-helper')
-    implementation project(':refresh-layout')
-    // 手势交互
-    implementation project(':patternlockview')
-    implementation project(':patternlockview-reactive')
-    //侧滑退出
-    implementation project(':swipebacklayout')
+    testImplementation 'junit:junit:4.12'
 
+    implementation project(':tools-library')
+
+    //下拉刷新上拉加载
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-29'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    // 手势交互
+    implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
+
+    implementation deps.support.multidex
+    implementation deps.support.design
+
+    //图表
+    implementation deps.mpChart
+    //滚轮选择器
+    implementation(deps.wheelPicker) {
+        exclude group: 'com.android.support'
+    }
+    //zxing 二维码
+    implementation deps.zxing
+    //facebook.rebound 动画
+    implementation deps.rebound
+    //微信
+    implementation deps.wechat
     //SVG描边动画 http://blog.csdn.net/leaf_130/article/details/54848071
-    implementation 'com.jaredrummler:animated-svg-view:1.0.5'
+    implementation deps.svg
     // banner
-    implementation 'cn.bingoogolapple:bga-banner:2.2.4'
+    implementation deps.bga_banner
     //底部导航按钮点击效果
-    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
-    //图片选择
-    implementation 'me.iwf.photopicker:PhotoPicker:0.9.12@aar'
+    implementation deps.ahbnaviga
+    //GreenDao数据库
+    implementation deps.greendao
+    implementation deps.greendao_gen
     //view注解
-    implementation 'com.jakewharton:butterknife:8.0.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
+    implementation deps.butterknife
+    annotationProcessor deps.knife_compil
 }

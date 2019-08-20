@@ -1,15 +1,57 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Medal</string>
-    <string name="homepage">首页</string>
-    <string name="trade">购物</string>
-    <string name="personal">我</string>
-    <string name="login">登录</string>
+<resources>
+    <!--<string name="app_name">RModel</string>-->
+    <string name="homepage" translatable="false">首页</string>
+    <string name="trade" translatable="false">购物</string>
+    <string name="personal" translatable="false">我</string>
+    <string name="homepage_title" translatable="false">首页</string>
+    <string name="trade_title" translatable="false">购物车</string>
+    <string name="personal_title" translatable="false">个人中心</string>
+    <string name="arrow_left" translatable="false">返回</string>
+    <string name="nav_aboutus" translatable="false">关于我们</string>
+    <string name="nav_feedback" translatable="false">问题反馈</string>
+    <string name="nav_update" translatable="false">检测更新</string>
+    <string name="nav_logout" translatable="false">退出登录</string>
+
+    <string name="show_login" translatable="false">登录</string>
+    <string name="input_phone_tips" translatable="false">请输入手机号</string>
+    <string name="input_captcha_tips" translatable="false">请输入验证码</string>
+    <string name="get_captcha_tips" translatable="false">获取验证码</string>
+    <string name="input_pw_tips" translatable="false">请输入密码</string>
+    <string name="contact_service" translatable="false">联系客服</string>
+    <string name="login_regist" translatable="false">没有账号？去注册</string>
+    <string name="show_regist" translatable="false">注册</string>
+    <string name="regist_login" translatable="false">已有账号？去登录</string>
+    <string name="input_pwagain_tips" translatable="false">请再次输入密码</string>
+    <string name="start" translatable="false">开始</string>
+    <string name="end" translatable="false">结束</string>
 
 
-    <string name="loading" tools:ignore="TypographyEllipsis">请稍后...</string>
-    <string name="share_contents">来自「AndroidFire」的分享：%1$s %2$s</string>
-    <string name="news_from">%1$s %2$s</string>
-    <string name="photo_detail_num">%1$d/%2$d</string>
-    <!-- 共享过度动画 -->
-    <string name="transition_photos">transition_animation_news_photos</string>
+    <string name="show_setting" translatable="false">设置</string>
+    <string name="name" translatable="false">名字</string>
+    <string name="input_name" translatable="false">请设置姓名</string>
+    <string name="phone" translatable="false">电话</string>
+    <string name="sp_size" translatable="false">缓存大小</string>
+    <string name="submit" translatable="false">提交</string>
+    <string name="show_open" translatable="false">点击开启</string>
+    <string name="show_off" translatable="false">点击关闭</string>
+
+    <string name="show_dialog" translatable="false">Dialog展示</string>
+    <string name="show_pattern_lock" translatable="false">手势密码</string>
+    <string name="show_fingerprint_lock" translatable="false">指纹密码</string>
+    <string name="show_toast" translatable="false">IToast_Labels</string>
+    <string name="show_bigimage" translatable="false">查看大图</string>
+    <string name="show_acache" translatable="false">数据时效存储</string>
+    <string name="show_qrcode" translatable="false">二维码</string>
+    <string name="show_webview" translatable="false">WebView</string>
+
+    <string name="loading" translatable="false">请稍后...</string>
+
+    <!--zxing-->
+    <string name="msg_camera_framework_bug"  translatable="false">相机被占用或没有相机权限，请检查</string>
+    <string name="button_ok"  translatable="false">退出</string>
+    <string name="scan_code" translatable="false">扫一扫</string>
+    <string name="open_flash" translatable="false">打开闪光灯</string>
+    <string name="close_flash" translatable="false">关闭闪光灯</string>
+    <string name="gallery" translatable="false">相册</string>
+    <string name="scan_failed_tip" translatable="false">图片解析失败.</string>
 </resources>

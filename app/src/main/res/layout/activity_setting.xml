@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windows_bg"
+    android:orientation="vertical">
+
+
+    <include
+        layout="@layout/layout_toolbar"
+        tools:ignore="IncludeLayoutParam" />
+
+    <com.veni.tools.widget.overscroll.OverScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/windows_bg"
+        android:clipToPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/setting_touxiang"
+                android:layout_width="@dimen/hight_80"
+                android:layout_height="@dimen/hight_80"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/hight_30" />
+
+            <TextView
+                android:id="@+id/setting_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/hight_15"
+                android:maxLength="30"
+                android:paddingTop="@dimen/hight_3"
+                android:singleLine="true"
+                android:textColor="@color/deep_gray"
+                android:textSize="@dimen/font_14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@drawable/divider_line"
+                android:orientation="vertical"
+                android:showDividers="middle|end">
+
+                <LinearLayout
+                    android:id="@+id/setting_username_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_48"
+                    android:background="@drawable/selectorbtn_white_whitesmoke"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:text="@string/name"
+                        android:textColor="@color/deep_gray"
+                        android:textSize="@dimen/font_15" />
+
+                    <TextView
+                        android:id="@+id/setting_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_48"
+                        android:gravity="center_vertical"
+                        android:hint="@string/input_name"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:paddingRight="@dimen/hight_15"
+                        android:textColor="@color/light_black"
+                        android:textColorHint="@color/deep_gray"
+                        android:textSize="@dimen/font_15" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/setting_userphone_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_48"
+                    android:background="@drawable/selectorbtn_white_whitesmoke"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:text="@string/phone"
+                        android:textColor="@color/deep_gray"
+                        android:textSize="@dimen/font_15" />
+
+                    <TextView
+                        android:id="@+id/setting_userphone"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_48"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:paddingRight="@dimen/hight_15"
+                        android:text="@string/nav_aboutus"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/font_15" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_20" />
+
+                <LinearLayout
+                    android:id="@+id/setting_sp_used_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_48"
+                    android:background="@drawable/selectorbtn_white_whitesmoke"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:text="@string/sp_size"
+                        android:textColor="@color/deep_gray"
+                        android:textSize="@dimen/font_15" />
+
+                    <TextView
+                        android:id="@+id/setting_sp_used"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_48"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:paddingRight="@dimen/hight_15"
+                        android:text="@string/nav_aboutus"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/font_15" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/setting_big_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_48"
+                    android:background="@drawable/selectorbtn_white_whitesmoke"
+                    android:drawableRight="@mipmap/ic_arrow_right"
+                    android:drawablePadding="@dimen/hight_15"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/hight_15"
+                    android:paddingRight="@dimen/hight_15"
+                    android:text="@string/show_bigimage"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/font_15" />
+
+                <LinearLayout
+                    android:id="@+id/setting_pattern_lock_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_48"
+                    android:background="@drawable/selectorbtn_white_whitesmoke"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:text="@string/show_pattern_lock"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/font_15" />
+
+                    <TextView
+                        android:id="@+id/setting_pattern_lock_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_48"
+                        android:gravity="center_vertical|right"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:paddingRight="@dimen/hight_15"
+                        android:text="@string/show_open"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/font_12" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/setting_fingerprint_lock_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hight_48"
+                    android:background="@drawable/selectorbtn_white_whitesmoke"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:text="@string/show_fingerprint_lock"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/font_15" />
+                    <TextView
+                        android:id="@+id/setting_fingerprint_lock_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_48"
+                        android:gravity="center_vertical|right"
+                        android:paddingLeft="@dimen/hight_15"
+                        android:paddingRight="@dimen/hight_15"
+                        android:text="@string/show_open"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/font_12" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.veni.tools.widget.overscroll.OverScrollView>
+</LinearLayout>

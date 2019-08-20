@@ -1,5 +1,6 @@
 package com.veni.tools.baserx;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -42,7 +43,8 @@ public class RxBus {
      * @param mAction1
      * @return
      */
-    public RxBus OnEvent(Observable<?> mObservable, Consumer<Object> mAction1) {
+    @SuppressLint("CheckResult")
+    public <T> RxBus OnEvent(Observable<T> mObservable, Consumer<T> mAction1) {
         mObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(mAction1, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {

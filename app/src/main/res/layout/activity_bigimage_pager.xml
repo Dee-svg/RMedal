@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_rootview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deep_gray_2">
+    android:background="#070707">
 
-    <com.veni.tools.view.ViewPagerFixed
+    <com.veni.tools.widget.ViewPagerFixed
         android:id="@+id/bigimage_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <com.veni.tools.widget.TouchImageView
+        android:id="@+id/bigimage_pager_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/bigimage_title_tv"
@@ -18,35 +26,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="80dp"
-        android:padding="@dimen/hight_8"
+        android:padding="8dp"
         android:textColor="@color/white"
-        android:textSize="@dimen/font_14"
+        android:textSize="14sp"
         tools:text="武汉奢华别墅区被洪水围困成孤岛" />
 
     <TextView
         android:id="@+id/bigimage_guideGroup"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/selector_guide_62gray"
-        android:layout_marginBottom="30dp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="14sp"
+        android:layout_alignParentBottom="true"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/selector_guide_62gray"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="14sp"
         tools:text="1/5" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/photo_det_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_collapseMode="pin"
+    <include layout="@layout/layout_toolbar"
         android:alpha="0"
-        android:background="@drawable/gradient_color_balck"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:navigationIcon="@drawable/icon_previous"
-        app:title="图片详情"
         tools:alpha="1.0" />
+
 </RelativeLayout>

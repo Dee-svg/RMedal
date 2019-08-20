@@ -1,50 +1,70 @@
 package com.name.rmedal.modelbean;
 
-import com.veni.tools.RegTools;
+import com.name.rmedal.ui.AppConstant;
 
-import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Unique;
 
 /**
  * 作者：kkan on 2017/12/04 10:36
  * 当前类注释:
  * 用户,根据实际情况来
  */
-
-public class UserBean  implements Serializable {
+@Entity
+public class UserBean {
+    /*
+     * @Entity：告诉GreenDao该对象为实体，只有被@Entity注释的Bean类才能被dao类操作
+     * @Id：对象的Id，使用Long类型作为EntityId，否则会报错。
+     * (autoincrement = true)表示主键会自增，如果false就会使用旧值
+     * @Property：可以自定义字段名，注意外键不能使用该属性
+     * @NotNull：属性不能为空
+     * @Transient：使用该注释的属性不会被存入数据库的字段中
+     * @Unique：该属性值必须在数据库中是唯一值
+     * @Generated：编译后自动生成的构造函数、方法等的注释，提示构造函数、方法等不能被修改
+     */
+    @Id(autoincrement = true)
+    private Long id;
+    @Unique
     private String userId;// 用户ID
     private String userName;// 用户名
-    private String userType;//用户类型
-    private String nickName;// 昵称
+    @Unique
     private String phone;// 电话
-    private String sex;// 性别
-    private String address;//地区全名
-    //        private String type;// 用户类型
+    private int sex;// 性别
     private String customerImg;//用户头像
     private String realName;//真实名字
-    private String proviceId;
-    private String proviceName;
-    private String cityId;
-    private String cityName;
-    private String districtName;
-    private String districtId;
-    private String isCreator;//是否加入创建人 1代表 是创建者  0代表不是
+    private String password;//密码
+
+
+    @Generated(hash = 697490817)
+    public UserBean(Long id, String userId, String userName, String phone, int sex,
+            String customerImg, String realName, String password) {
+        this.id = id;
+        this.userId = userId;
+        this.userName = userName;
+        this.phone = phone;
+        this.sex = sex;
+        this.customerImg = customerImg;
+        this.realName = realName;
+        this.password = password;
+    }
+
+    @Generated(hash = 1203313951)
+    public UserBean() {
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUserId() {
-
-        if (userId != null && RegTools.checkDecimals(userId)) {
-            double uid = Double.parseDouble(userId);
-            String nuid = userId;
-            if (userId.contains(".")) {
-                nuid = userId.substring(0, userId.indexOf("."));
-                long nnuid=Long.parseLong(nuid);
-                if(nnuid!=uid){
-                    nuid = userId;
-                }
-            }
-            return nuid + "";
-        } else {
-            return "";
-        }
+        return userId;
     }
 
     public void setUserId(String userId) {
@@ -52,27 +72,11 @@ public class UserBean  implements Serializable {
     }
 
     public String getUserName() {
-        return userName;
+        return userName == null ? "Veni" : userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
     }
 
     public String getPhone() {
@@ -83,24 +87,19 @@ public class UserBean  implements Serializable {
         this.phone = phone;
     }
 
-    public String getSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getCustomerImg() {
-        return customerImg == null ? "" : customerImg;
+        if (customerImg == null) {
+            return AppConstant.img_head;
+        }
+        return customerImg;
     }
 
     public void setCustomerImg(String customerImg) {
@@ -108,6 +107,9 @@ public class UserBean  implements Serializable {
     }
 
     public String getRealName() {
+        if (realName == null) {
+            return "@KKan";
+        }
         return realName;
     }
 
@@ -115,59 +117,11 @@ public class UserBean  implements Serializable {
         this.realName = realName;
     }
 
-    public String getProviceId() {
-        return proviceId;
+    public String getPassword() {
+        return password;
     }
 
-    public void setProviceId(String proviceId) {
-        this.proviceId = proviceId;
-    }
-
-    public String getProviceName() {
-        return proviceName;
-    }
-
-    public void setProviceName(String proviceName) {
-        this.proviceName = proviceName;
-    }
-
-    public String getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public String getDistrictName() {
-        return districtName;
-    }
-
-    public void setDistrictName(String districtName) {
-        this.districtName = districtName;
-    }
-
-    public String getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId;
-    }
-
-    public String getIsCreator() {
-        return isCreator;
-    }
-
-    public void setIsCreator(String isCreator) {
-        this.isCreator = isCreator;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

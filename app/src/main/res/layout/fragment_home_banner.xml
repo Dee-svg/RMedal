@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <cn.bingoogolapple.bgabanner.BGABanner
+        android:id="@+id/home_item_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/hight_180"
+        style="@style/BannerDefaultStyle"/>
+
+    <com.veni.tools.widget.RunTextView
+        android:id="@+id/home_item_runtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text=""
+        android:textColor="@color/light_black" />
+
+    <com.veni.tools.widget.verticalview.TextViewVertical
+        android:id="@+id/home_item_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:labelVisibility="false"
+        app:contentColor="@color/blue"
+        app:interval="3000"
+        app:contentSize="@dimen/font_16"
+        app:maxshow="1" />
+
+    <com.veni.tools.widget.verticalview.TextViewVertical
+        android:id="@+id/home_item_verticalmore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:labelVisibility="true"
+        app:labelImage="@mipmap/ic_launcher"
+        app:labelStr="@string/show_bigimage"
+        app:labelColor="@color/red"
+        app:labelSize="@dimen/font_10"
+        app:contentColor="@color/red"
+        app:contentSize="@dimen/font_14"
+        app:maxshow="2"
+        app:setAnimDuration="true"
+        app:interval="2000"/>
+</LinearLayout>

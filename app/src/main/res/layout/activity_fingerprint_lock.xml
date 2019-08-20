@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windows_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/fingerprint_lock_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/ic_fingerprint" />
+
+            <TextView
+                android:id="@+id/fingerprint_lock_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="点击验证指纹解锁"
+                android:textColor="#000"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fingerprint_lock_login_bypw"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/hight_45"
+            android:paddingRight="@dimen/hight_20"
+            android:gravity="center_vertical|right"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:text="使用密码登录"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/font_14"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

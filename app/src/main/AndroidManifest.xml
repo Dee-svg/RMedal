@@ -2,43 +2,64 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.name.rmedal">
 
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+    <!--它可以监听用户的连接状态并在用户重新连接到网络时重启之前失败的请求-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 外部存储 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 许可振动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- 打开闪光灯 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <!-- 许可使用照相机 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- 许可调用相机硬件 -->
+    <uses-feature android:name="android.hardware.camera"/>
+    <!-- 许可调用相机自动对焦 -->
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
     <!--wifi 配网demo-->
     <uses-feature
         android:name="android.hardware.wifi"
         android:required="true" />
     <!--修改系统设置 动态请求-->
     <!--<uses-permission android:name="android.permission.WRITE_SETTINGS"-->
-        <!--tools:ignore="ProtectedPermissions" />-->
+    <!--tools:ignore="ProtectedPermissions" />-->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
     <application
-        android:name=".ApplicationRxTools"
+        android:name=".ApplicationRMedal"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.SwipeBack">
+
         <activity
-            android:name=".ui.main.SVGActivity"
+            android:name=".ui.main.WelcomeActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,60 +72,77 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme"/>
+        <!--手势密码-->
         <activity
-            android:name=".test.ToastActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
+            android:name=".ui.personal.PatternlockActivity"/>
+        <!--指纹密码-->
         <activity
-            android:name=".test.Dialog_ProgressActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.ACacheActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.CacheActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.HeartLikeViewActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.RichTextActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.PopWinActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.VerifyCodeActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.RunTextActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.PhoneInfoActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
-        <activity
-            android:name=".test.CardGroupActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
+            android:name=".ui.personal.FingerprintLockActivity"/>
+        <!--登录-->
         <activity
             android:name=".ui.main.LoginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme.SwipeBack"/>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <!--注册-->
         <activity
-            android:name=".ui.main.PatternlockActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
+            android:name=".ui.main.RegistActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <!--设置-->
         <activity
-            android:name=".ui.zxing.QRCodeActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
+            android:name=".ui.personal.SettingActivity"/>
+        <!--意见反馈-->
         <activity
-            android:name=".ui.zxing.ScanerCodeActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
+            android:name=".ui.personal.FeedBackActivity"/>
+        <!--计步页-->
+        <activity
+            android:name=".ui.personal.StepServiceActivity"/>
 
-        <activity android:name=".bigimage.BigImagePagerActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
 
-        <activity android:name=".html5.WebViewActivity"
-            android:theme="@style/AppTheme.SwipeBack"/>
+        <activity
+            android:name=".ui.home.AActivity"/>
+        <!--二维码-->
+        <activity android:name=".ui.zxing.QRCodeActivity" />
+        <!--二维码 扫描-->
+        <activity android:name=".ui.zxing.android.CaptureActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:theme="@style/ZxingTheme"/>
 
+        <activity
+            android:name=".ui.bigimage.BigImagePagerActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/BigImageTheme"/>
+
+        <activity
+            android:name=".ui.web.WebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/BigImageTheme"/>
+
+        <!--微信-->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
+
+        <!--计步器-->
+        <service android:name=".widget.stepcount.StepService"/>
+        <service android:name=".widget.stepcount.StepService$GrayInnerService"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
     </application>
-
 </manifest>

@@ -21,6 +21,8 @@ import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 
+import com.veni.tools.util.StatusBarUtils;
+
 /**
  * 显示或隐藏状态栏
  */
@@ -32,7 +34,11 @@ public class SystemUiVisibilityUtil {
             | View.SYSTEM_UI_FLAG_FULLSCREEN; // Activity全屏显示，且状态栏被隐藏覆盖掉
 
     public static void exit(Activity activity) {
-        if (Build.VERSION.SDK_INT >= 19) {
+        if(Build.VERSION.SDK_INT >= 25){
+            if (!StatusBarUtils.isMIUI6Later()) {
+                addFlags(activity.getWindow().getDecorView(), FLAG_IMMERSIVE);
+            }
+        }else  if (Build.VERSION.SDK_INT >= 19) {
             addFlags(activity.getWindow().getDecorView(), FLAG_IMMERSIVE);
         }
     }
@@ -42,7 +48,9 @@ public class SystemUiVisibilityUtil {
     }
 
     public static void enter(Activity activity) {
-        if (Build.VERSION.SDK_INT >= 19) {
+        if(Build.VERSION.SDK_INT >= 25){
+            clearFlags(activity.getWindow().getDecorView(), FLAG_IMMERSIVE);
+        }else if (Build.VERSION.SDK_INT >= 19) {
             clearFlags(activity.getWindow().getDecorView(), FLAG_IMMERSIVE);
         }
     }
