@@ -37,11 +37,22 @@ public class PersonalPresenter extends PersonalContract.Presenter {
 
     @Override
     public void checkVersion(String version) {
-        //请求参数
+        //正式调试
+       /* //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("version", version);
-        //正式调试
-//        HttpManager.getInstance().getOkHttpUrlService().getLastVersion(param)
+        HttpManager.getInstance().getOkHttpUrlService().checkVersion(param)
+                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
+            @Override
+            public void _onNext(CheckVersionBean data) {
+                mView.returnVersionData(data);
+            }
+
+            @Override
+            public void onErrorSuccess(int code, String message, boolean issuccess) {
+                mView.onErrorSuccess(code, message, issuccess, false);
+            }
+        });*/
         //测试数据
         AppTools.createObservable(CheckVersionBean.class)
                 .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main())

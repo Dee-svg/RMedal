@@ -24,7 +24,22 @@ public class LoginPresenter extends LoginContract.Presenter {
     @Override
     public void getLogin(final String phone, final String password) {
         //正式调试
-//        HttpManager.getInstance().getOkHttpUrlService().getUserData(phone,password)
+       /* //请求参数
+        HashMap<String, String> param = new HashMap<>();
+        param.put("phone", phone);
+        param.put("password", password);
+        HttpManager.getInstance().getOkHttpUrlService().getLogin(param)
+                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
+            @Override
+            public void _onNext(CheckVersionBean data) {
+                mView.returnVersionData(data);
+            }
+
+            @Override
+            public void onErrorSuccess(int code, String message, boolean issuccess) {
+                mView.onErrorSuccess(code, message, issuccess, false);
+            }
+        });*/
         //测试数据
         AppTools.createObservable(UserBean.class)
                 .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())

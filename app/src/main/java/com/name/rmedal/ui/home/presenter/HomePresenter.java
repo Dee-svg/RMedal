@@ -26,13 +26,24 @@ public class HomePresenter extends HomeContract.Presenter {
 
     @Override
     public void getWangYiNews(final int page) {
-
+        //正式调试
+       /*
         //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("page", page+"");
         param.put("count", AppConstant.pageSize+"");
-        //正式调试
-//        HttpManager.getInstance().getOkHttpUrlService().getWangYiNews(param)
+        HttpManager.getInstance().getOkHttpUrlService().getWangYiNews(param)
+                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
+            @Override
+            public void _onNext(CheckVersionBean data) {
+                mView.returnVersionData(data);
+            }
+
+            @Override
+            public void onErrorSuccess(int code, String message, boolean issuccess) {
+                mView.onErrorSuccess(code, message, issuccess, false);
+            }
+        });*/
         //测试数据
         AppTools.createListObservable(NewsBean.class)
                 .compose(RxSchedulers.<HttpRespose<List<NewsBean>>>io_main())
