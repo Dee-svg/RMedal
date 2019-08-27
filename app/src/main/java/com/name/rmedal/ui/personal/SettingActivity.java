@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.name.rmedal.R;
 import com.name.rmedal.base.BaseActivity;
 import com.name.rmedal.modelbean.UserBean;
@@ -28,7 +30,6 @@ import com.veni.tools.util.JsonUtils;
 import com.veni.tools.util.PermissionsUtils;
 import com.veni.tools.util.SPUtils;
 import com.veni.tools.widget.TitleView;
-import com.veni.tools.widget.imageload.ImageLoaderTool;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -82,8 +83,8 @@ public class SettingActivity extends BaseActivity {
 
         userBean = AppTools.getUserBean(context);
         settingName.setText(userBean.getUserName());
-        ImageLoaderTool.with(context).setError(R.mipmap.ic_touxiang).loadCircle()
-                .loadUrl(userBean.getCustomerImg()).into(settingTouxiang);
+        Glide.with(context).load(userBean.getCustomerImg()).apply(new RequestOptions()
+                .error(R.mipmap.ic_touxiang).circleCrop()).into(settingTouxiang);
         settingUserName.setText(userBean.getRealName());
         settingUserPhone.setText(userBean.getPhone());
 
