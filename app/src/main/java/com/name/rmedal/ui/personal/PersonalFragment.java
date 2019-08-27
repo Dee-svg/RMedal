@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.name.rmedal.BuildConfig;
 import com.name.rmedal.R;
 import com.name.rmedal.base.BaseFragment;
@@ -32,7 +34,6 @@ import com.veni.tools.util.DataUtils;
 import com.veni.tools.util.StatusBarUtils;
 import com.veni.tools.util.ToastTool;
 import com.veni.tools.widget.TitleView;
-import com.veni.tools.widget.imageload.ImageLoaderTool;
 
 import java.io.File;
 
@@ -146,8 +147,8 @@ public class PersonalFragment extends BaseFragment<PersonalPresenter> implements
             personalName.setText(userBean.getUserName());
         }
         if (personalTouxiang != null) {
-            ImageLoaderTool.with(context).setError(R.mipmap.ic_touxiang).loadCircle()
-                    .loadUrl(userBean.getCustomerImg()).into(personalTouxiang);
+            Glide.with(context).load(userBean.getCustomerImg()).apply(new RequestOptions()
+                    .error(R.mipmap.ic_touxiang).circleCrop()).into(personalTouxiang);
         }
     }
 

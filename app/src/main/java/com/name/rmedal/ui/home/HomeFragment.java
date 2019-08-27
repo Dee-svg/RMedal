@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.name.rmedal.R;
@@ -45,7 +47,6 @@ import com.veni.tools.util.TimeUtils;
 import com.veni.tools.util.ToastTool;
 import com.veni.tools.widget.RunTextView;
 import com.veni.tools.widget.TitleView;
-import com.veni.tools.widget.imageload.ImageLoaderTool;
 import com.veni.tools.widget.verticalview.SimpleViewHolder;
 import com.veni.tools.widget.verticalview.TextViewVertical;
 import com.veni.tools.widget.verticalview.VerticalView;
@@ -161,9 +162,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             @Override
             protected void convert(BaseViewHolder viewHolder, final NewsBean item) {
                 ImageView function_item_iv = viewHolder.getView(R.id.home_item_iv);
+                Glide.with(context).load(item.getImage()).apply(new RequestOptions()
+                        .error(R.mipmap.ic_error_imageload)
+                        .placeholder(R.mipmap.ic_holder_imageload).fitCenter())
+                        .into(function_item_iv);
 
-                ImageLoaderTool.with(context).setError(R.mipmap.ic_error_imageload)
-                        .loadUrl(item.getImage()).into(function_item_iv);
                 viewHolder.setText(R.id.home_item_title, item.getTitle());
                 viewHolder.setText(R.id.home_item_time, TimeUtils.formatDate(item.getPasstime()));
 //                    function_item_iv.setImageDrawable(ContextCompat.getDrawable(context, image));
@@ -246,7 +249,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             @Override
             public void fillBannerItem(BGABanner banner, ImageView itemView, @Nullable BannerBean model, int position) {
                 if (model != null) {
-                    ImageLoaderTool.with(context).loadUrl(model.getImage_url()).into(itemView);
+                    Glide.with(context).load(model.getImage_url()).apply(new RequestOptions()
+                            .error(R.mipmap.ic_error_imageload)
+                            .placeholder(R.mipmap.ic_holder_imageload).fitCenter())
+                            .into(itemView);
                 }
             }
         });
