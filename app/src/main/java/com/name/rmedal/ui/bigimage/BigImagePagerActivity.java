@@ -3,7 +3,6 @@ package com.name.rmedal.ui.bigimage;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.name.rmedal.R;
 import com.name.rmedal.base.BaseActivity;
 import com.veni.tools.LogUtils;
@@ -30,9 +31,7 @@ import com.veni.tools.util.SystemUiVisibilityUtil;
 import com.veni.tools.widget.TitleView;
 import com.veni.tools.widget.TouchImageView;
 import com.veni.tools.widget.ViewPagerFixed;
-import com.veni.tools.widget.imageload.ImageLoaderTool;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -277,17 +276,10 @@ public class BigImagePagerActivity extends BaseActivity {
                 hideOrShowStatusBar();
             }
         });
-        final Uri uri;
-        if (path.startsWith("http")) {
-            uri = Uri.parse(path);
-        } else {
-            uri = Uri.fromFile(new File(path));
-        }
-        ImageLoaderTool.with(context)
-                .loadUrl(uri)
-                .setError(R.mipmap.ic_error_imageload)
-                .setPlaceholder(R.mipmap.ic_holder_imageload)
-                .override(800, 800).into(imageView);
+        Glide.with(context).load(path).apply(new RequestOptions()
+                .error(R.mipmap.ic_error_imageload)
+                .placeholder(R.mipmap.ic_holder_imageload).fitCenter())
+                .into(imageView);
     }
 
     /**
