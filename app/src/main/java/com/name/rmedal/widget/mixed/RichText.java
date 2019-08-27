@@ -120,25 +120,21 @@ public class RichText extends TextView implements Drawable.Callback, View.OnAtta
 
     @Override
     public void onViewDetachedFromWindow(View v) {
-        if(glideImageGeter!=null){
-            glideImageGeter.recycle();
-        }
+        glideImageGeter.recycle();
     }
 
     //当View离开这个页面的时候调用
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if(glideImageGeter!=null){
-            glideImageGeter.recycle();
-        }
+        glideImageGeter.recycle();
     }
 
     @Override
     public void invalidateDrawable(Drawable who) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            invalidateOutline();
-        }
+
+        invalidateOutline();
+
     }
 
     @Override

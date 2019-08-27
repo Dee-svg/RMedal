@@ -6,12 +6,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.name.rmedal.R;
 import com.name.rmedal.modelbean.CardDataItem;
 import com.name.rmedal.widget.cardslide.CardAdapter;
 import com.veni.tools.listener.OnNoFastClickListener;
+import com.veni.tools.widget.imageload.ImageLoaderTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,10 +83,7 @@ public class CardGroupAdapter extends CardAdapter {
         }
 
         public void bindData(final CardDataItem itemData) {
-            Glide.with(context).load(itemData.getImage_url()).apply(new RequestOptions()
-                    .error(R.mipmap.ic_error_imageload)
-                    .placeholder(R.mipmap.ic_holder_imageload).fitCenter())
-                    .into(imageView);
+            ImageLoaderTool.with(context).loadUrl(itemData.getImage_url()).into(imageView);
             userNameTv.setText(itemData.getImage_describe());
             imageNumTv.setText(itemData.getImageNum() + "");
             likeNumTv.setText(itemData.getLikeNum() + "");

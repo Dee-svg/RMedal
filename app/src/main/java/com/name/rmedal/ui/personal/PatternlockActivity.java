@@ -8,8 +8,6 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.andrognito.patternlockview.utils.ResourceUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.name.rmedal.R;
 import com.name.rmedal.base.BaseActivity;
 import com.name.rmedal.tools.AppTools;
@@ -18,6 +16,7 @@ import com.veni.tools.LogUtils;
 import com.veni.tools.base.ui.JumpOptions;
 import com.veni.tools.util.ACache;
 import com.veni.tools.util.ToastTool;
+import com.veni.tools.widget.imageload.ImageLoaderTool;
 
 import java.util.List;
 
@@ -57,8 +56,7 @@ public class PatternlockActivity extends BaseActivity {
     public void initView(Bundle savedInstanceState) {
         immersive(null,false);
 
-        Glide.with(context).load(userBean.getCustomerImg()).apply(new RequestOptions()
-                .error(R.mipmap.ic_touxiang).circleCrop()).into(profileImage);
+        ImageLoaderTool.with(context).loadCircle().loadUrl(AppTools.getUserBean(context).getCustomerImg()).into(profileImage);
         data_type = getIntent().getStringExtra(AppConstant.INTENT_DATATYPE);
         //初始化手势密码参数
         initlockview();

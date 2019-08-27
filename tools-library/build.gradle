@@ -43,6 +43,8 @@ dependencies {
     api deps.rx.android
     //okhttp3
     api deps.okhttp.logging
+    //显示图片框架
+    api deps.glide
 
     //侧滑退出
     api files('libs/swipeback.aar')//修改过swipeback

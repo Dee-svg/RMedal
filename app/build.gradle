@@ -114,8 +114,6 @@ dependencies {
     implementation deps.support.multidex
     implementation deps.support.design
 
-    //显示图片框架
-    implementation deps.glide
     //图表
     implementation deps.mpChart
     //滚轮选择器
