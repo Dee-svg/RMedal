@@ -170,7 +170,7 @@ public abstract class ActivityBase<T extends BasePresenter>  extends AppCompatAc
         Intent intent = jumpOptions.getIntent(context, activity);
         startActivity(intent);
         if (jumpOptions.isFinishFlag()) {
-            ActivityTManager.get().finishExceptActivity(activity);
+            context.finish();
         }
     }
 
