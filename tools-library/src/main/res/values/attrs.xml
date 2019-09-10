@@ -51,23 +51,23 @@
     </declare-styleable>
 
     <!--标签列表-->
-    <declare-styleable name="labels_view">
-        <attr name="select_type" format="enum">
+    <declare-styleable name="labelsView">
+        <attr name="labels_select_type" format="enum">
             <enum name="NONE" value="1" />
             <enum name="SINGLE" value="2" />
             <enum name="SINGLE_IRREVOCABLY" value="3" />
             <enum name="MULTI" value="4" />
         </attr>
-        <attr name="max_select" format="integer" />
-        <attr name="label_text_color" format="reference" />
-        <attr name="label_text_size" format="dimension" />
-        <attr name="label_text_padding_left" format="dimension" />
-        <attr name="label_text_padding_top" format="dimension" />
-        <attr name="label_text_padding_right" format="dimension" />
-        <attr name="label_text_padding_bottom" format="dimension" />
-        <attr name="line_margin" format="dimension" />
-        <attr name="word_margin" format="dimension" />
-        <attr name="label_background" format="reference" />
+        <attr name="labels_max_select" format="integer" />
+        <attr name="labels_text_color" format="reference" />
+        <attr name="labels_text_size" format="dimension" />
+        <attr name="labels_text_padding_left" format="dimension" />
+        <attr name="labels_text_padding_top" format="dimension" />
+        <attr name="labels_text_padding_right" format="dimension" />
+        <attr name="labels_text_padding_bottom" format="dimension" />
+        <attr name="labels_line_margin" format="dimension" />
+        <attr name="labels_word_margin" format="dimension" />
+        <attr name="labels_background" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="ClearableEditText">

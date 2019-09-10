@@ -160,25 +160,25 @@ public class LabelsView extends ViewGroup implements View.OnClickListener {
 
     private void getAttrs(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray mTypedArray = context.obtainStyledAttributes(attrs, R.styleable.labels_view);
-            int type = mTypedArray.getInt(R.styleable.labels_view_select_type, 1);
+            TypedArray mTypedArray = context.obtainStyledAttributes(attrs, R.styleable.labelsView);
+            int type = mTypedArray.getInt(R.styleable.labelsView_labels_select_type, 1);
             mSelectType = SelectType.get(type);
 
-            mMaxSelect = mTypedArray.getInteger(R.styleable.labels_view_max_select, 0);
-            mTextColor = mTypedArray.getColorStateList(R.styleable.labels_view_label_text_color);
-            mTextSize = mTypedArray.getDimension(R.styleable.labels_view_label_text_size,
+            mMaxSelect = mTypedArray.getInteger(R.styleable.labelsView_labels_max_select, 0);
+            mTextColor = mTypedArray.getColorStateList(R.styleable.labelsView_labels_text_color);
+            mTextSize = mTypedArray.getDimension(R.styleable.labelsView_labels_text_size,
                     sp2px(context, 14));
             mTextPaddingLeft = mTypedArray.getDimensionPixelOffset(
-                    R.styleable.labels_view_label_text_padding_left, 0);
+                    R.styleable.labelsView_labels_text_padding_left, 0);
             mTextPaddingTop = mTypedArray.getDimensionPixelOffset(
-                    R.styleable.labels_view_label_text_padding_top, 0);
+                    R.styleable.labelsView_labels_text_padding_top, 0);
             mTextPaddingRight = mTypedArray.getDimensionPixelOffset(
-                    R.styleable.labels_view_label_text_padding_right, 0);
+                    R.styleable.labelsView_labels_text_padding_right, 0);
             mTextPaddingBottom = mTypedArray.getDimensionPixelOffset(
-                    R.styleable.labels_view_label_text_padding_bottom, 0);
-            mLineMargin = mTypedArray.getDimensionPixelOffset(R.styleable.labels_view_line_margin, 0);
-            mWordMargin = mTypedArray.getDimensionPixelOffset(R.styleable.labels_view_word_margin, 0);
-            mLabelBgResId = mTypedArray.getResourceId(R.styleable.labels_view_label_background, 0);
+                    R.styleable.labelsView_labels_text_padding_bottom, 0);
+            mLineMargin = mTypedArray.getDimensionPixelOffset(R.styleable.labelsView_labels_line_margin, 0);
+            mWordMargin = mTypedArray.getDimensionPixelOffset(R.styleable.labelsView_labels_word_margin, 0);
+            mLabelBgResId = mTypedArray.getResourceId(R.styleable.labelsView_labels_background, 0);
             mTypedArray.recycle();
         }
     }

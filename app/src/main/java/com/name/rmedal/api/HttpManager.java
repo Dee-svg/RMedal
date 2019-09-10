@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.name.rmedal.api.cookie.CookieJarImpl;
+import com.name.rmedal.api.cookie.store.DBCookieStore;
 import com.name.rmedal.tools.AppTools;
 import com.veni.tools.VnUtils;
 import com.veni.tools.baserx.BasicParamsInterceptor;
@@ -106,6 +108,9 @@ public class HttpManager {
                 .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MILLISECONDS)
                 .addInterceptor(basicParamsInterceptor)
                 .addInterceptor(logInterceptor)
+                .cookieJar(new CookieJarImpl(new DBCookieStore(VnUtils.getContext())))  //使用数据库保持cookie，如果cookie不过期，则一直有效
+                //.cookieJar(new CookieJarImpl(new SPCookieStore(this)))            //使用sp保持cookie，如果cookie不过期，则一直有效
+                //.cookieJar(new CookieJarImpl(new MemoryCookieStore()))           //使用内存保持cookie，app退出后，cookie消失
                 .cache(cache)
                 .build();
 

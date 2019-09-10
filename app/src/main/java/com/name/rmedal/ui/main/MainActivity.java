@@ -2,6 +2,7 @@ package com.name.rmedal.ui.main;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.widget.FrameLayout;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.name.rmedal.R;
 import com.name.rmedal.base.BaseActivity;
 import com.name.rmedal.modelbean.CheckVersionBean;
@@ -97,26 +99,54 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     /* 初始化底部按钮*/
     private void initBottomNavigation() {
-        //Create items
+        //创建items，这里接收3个参数，分别是item的文字，item的icon，选中item时的整体颜色（该项需要开启）
         AHBottomNavigationItem homepage = new AHBottomNavigationItem(R.string.homepage, R.mipmap.ic_main_homepage, android.R.color.white);
         AHBottomNavigationItem tradepage = new AHBottomNavigationItem(R.string.trade, R.mipmap.ic_main_trade, android.R.color.white);
         AHBottomNavigationItem vippage = new AHBottomNavigationItem(R.string.personal, R.mipmap.ic_main_personal, android.R.color.white);
-        // Add items
+        //添加items
         mainBottomNavigation.addItem(homepage);
         mainBottomNavigation.addItem(tradepage);
         mainBottomNavigation.addItem(vippage);
-        //始终显示文字
-        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
-        // Set background color
-        mainBottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor(context, R.color.home_bottom_nav_color));
-        // 禁用CoordinatorLayout内部的转换
-        mainBottomNavigation.setBehaviorTranslationEnabled(false);
-        // 启用FloatingActionButton的转换
-//        mainBottomNavigation.manageFloatingActionButtonBehavior(floatingActionButton);
 
-        // Change colors
+        //设置整体背景颜色（如果开启了单个的背景颜色，该项将会无效）
+        mainBottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor(context, R.color.home_bottom_nav_color));
+
+        //设置item被选中和待选时的颜色
         mainBottomNavigation.setAccentColor(ContextCompat.getColor(context, R.color.green));
         mainBottomNavigation.setInactiveColor(ContextCompat.getColor(context, R.color.blue));
+
+        // 禁用CoordinatorLayout内部的转换
+        mainBottomNavigation.setBehaviorTranslationEnabled(false);
+
+        //强制绘图（针对带字的icon，测试时出现了bug，导致item不被选时也有颜色，未解决）
+        mainBottomNavigation.setForceTint(true);
+
+        //设置item文字状态
+        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.SHOW_WHEN_ACTIVE);
+        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
+
+        //是否开启切换item切换颜色
+        mainBottomNavigation.setColored(true);
+
+        //设置初始选中的item
+        mainBottomNavigation.setCurrentItem(1);
+
+        //创建、添加通知（小红点），可使用builder构建
+        mainBottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
+        mainBottomNavigation.setNotification("1", 3);
+        // OR
+        AHNotification notification = new AHNotification.Builder()
+                .setText("1")
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.red))
+                .setTextColor(ContextCompat.getColor(context, R.color.light_black))
+                .build();
+        mainBottomNavigation.setNotification(notification, 1);
+
+        //使某个item有效或者无效（无法被选），并可以设置颜色
+        mainBottomNavigation.enableItemAtPosition(2);
+        mainBottomNavigation.disableItemAtPosition(2);
+        mainBottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));
         //强制着色绘图(例如，对于带有图标的字体有用)
         mainBottomNavigation.setForceTint(true);
         // 在导航栏下显示颜色(API 21+)

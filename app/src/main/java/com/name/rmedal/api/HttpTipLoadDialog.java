@@ -39,8 +39,9 @@ public class HttpTipLoadDialog {
      */
     public void showDialog(Context context, final String messageText) {
         this.context = context;
-        if (context == null || !(context instanceof Activity) || ((Activity) context).isFinishing())
+        if (context == null || !(context instanceof Activity) || ((Activity) context).isFinishing()){
             return;
+        } //maybe not good !
         ((Activity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -53,8 +54,14 @@ public class HttpTipLoadDialog {
     }
 
     public void dismissDialog() {
-        if (context == null || !(context instanceof Activity))
-            return;             //maybe not good !
+        if (context == null || !(context instanceof Activity) || ((Activity) context).isFinishing()){
+            try {
+                destroyDialogBuilder();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return;
+        } //maybe not good !
         ((Activity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {

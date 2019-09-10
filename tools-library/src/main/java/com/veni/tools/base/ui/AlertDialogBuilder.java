@@ -247,6 +247,14 @@ public class AlertDialogBuilder {
 
     public void show() {
         if (dialog != null) {
+            if (context == null || ((context instanceof Activity)&& ((Activity) context).isFinishing())){
+                return;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if ((context instanceof Activity)&& ((Activity) context).isDestroyed()){
+                    return;
+                }
+            }
             dialog.show();
             if (messageDrawable != null && messageDrawable instanceof SpriteContainer) {
                 dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
