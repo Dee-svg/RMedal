@@ -68,7 +68,7 @@ public class WelcomePresenter extends WelcomeContract.Presenter {
                         httpRespose.setResult(versionBean);
                     }
                 })
-                .subscribe(new RxSubscriber<CheckVersionBean>() {
+                .subscribe(new RxSubscriber<CheckVersionBean>(this) {
                     @Override
                     public void _onNext(CheckVersionBean data) {
                         mView.returnVersionData(data);

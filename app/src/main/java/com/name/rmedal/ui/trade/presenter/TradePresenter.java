@@ -20,7 +20,7 @@ public class TradePresenter extends TradeContract.Presenter {
     public void getUserData(String data,String deviceToken) {
         HttpManager.getInstance().getOkHttpUrlService().getUserData(data,deviceToken)
                 .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())
-                .subscribe(new RxSubscriber<UserBean>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_UserData(data);

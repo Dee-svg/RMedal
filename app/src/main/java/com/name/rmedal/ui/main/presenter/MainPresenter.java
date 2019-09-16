@@ -84,7 +84,7 @@ public class MainPresenter extends MainContract.Presenter {
                         httpRespose.setMessage(resposeMes);
                     }
                 })
-                .subscribe(new RxSubscriber<UserBean>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_UserData(data);
@@ -121,7 +121,7 @@ public class MainPresenter extends MainContract.Presenter {
                         httpRespose.setResult(versionBean);
                     }
                 })
-                .subscribe(new RxSubscriber<CheckVersionBean>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<CheckVersionBean>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(CheckVersionBean data) {
                         mView.returnVersionData(data);

@@ -122,19 +122,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         mainBottomNavigation.setForceTint(true);
 
         //设置item文字状态
-        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.SHOW_WHEN_ACTIVE);
-        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+        /*mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.SHOW_WHEN_ACTIVE);
+        mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);*/
         mainBottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
 
-        //是否开启切换item切换颜色
-        mainBottomNavigation.setColored(true);
+       /* //是否开启切换item切换颜色
+        mainBottomNavigation.setColored(true);*/
 
-        //设置初始选中的item
-        mainBottomNavigation.setCurrentItem(1);
+       /* //设置初始选中的item
+        mainBottomNavigation.setCurrentItem(1);*/
 
         //创建、添加通知（小红点），可使用builder构建
         mainBottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
-        mainBottomNavigation.setNotification("1", 3);
+        mainBottomNavigation.setNotification("1", 0);
         // OR
         AHNotification notification = new AHNotification.Builder()
                 .setText("1")
@@ -143,10 +143,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 .build();
         mainBottomNavigation.setNotification(notification, 1);
 
-        //使某个item有效或者无效（无法被选），并可以设置颜色
+       /* //使某个item有效或者无效（无法被选），并可以设置颜色
         mainBottomNavigation.enableItemAtPosition(2);
         mainBottomNavigation.disableItemAtPosition(2);
-        mainBottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));
+        mainBottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));*/
+
         //强制着色绘图(例如，对于带有图标的字体有用)
         mainBottomNavigation.setForceTint(true);
         // 在导航栏下显示颜色(API 21+)

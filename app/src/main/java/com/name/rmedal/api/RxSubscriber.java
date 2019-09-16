@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.NetworkOnMainThreadException;
 
 import com.veni.tools.LogUtils;
+import com.veni.tools.base.mvp.BasePresenter;
 import com.veni.tools.util.JsonUtils;
 
 import java.io.IOException;
@@ -40,13 +41,15 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
     private int errorCode = -1111;//错误码
     private String errorMsg = "未知的错误！";//错误信息
     private Disposable disposable;
+    private BasePresenter basePresenter;
 
     /**
      * 构造方法
      * 无加载弹窗
      * 显示返回提示信息
      */
-    public RxSubscriber() {
+    public RxSubscriber(BasePresenter basePresenter) {
+        this.basePresenter=basePresenter;
     }
 
     /**
@@ -56,8 +59,11 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
      *@param loadmsg loadmsg可为空
      * 具体在RxHttpTipLoadDialog设置
      */
-    public RxSubscriber(Context context, String loadmsg) {
-        HttpTipLoadDialog.getHttpTipLoadDialog().showDialog(context, loadmsg);
+    public RxSubscriber(BasePresenter basePresenter, String loadmsg) {
+        this.basePresenter=basePresenter;
+        if(this.basePresenter!=null){
+            HttpTipLoadDialog.getHttpTipLoadDialog().showDialog(basePresenter.mContext, loadmsg);
+        }
     }
 
     /*抽象方法*/
@@ -76,6 +82,9 @@ public abstract class RxSubscriber<T> implements Observer<HttpRespose<T>> {
     @Override
     public void onSubscribe(Disposable d) {
         disposable = d;
+        if(this.basePresenter!=null){
+            this.basePresenter.mRxManage.add(d);
+        }
     }
 
     /**

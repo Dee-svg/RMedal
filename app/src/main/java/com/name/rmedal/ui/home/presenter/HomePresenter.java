@@ -66,7 +66,7 @@ public class HomePresenter extends HomeContract.Presenter {
                         httpRespose.setMessage(resposeMes);
                     }
                 })
-                .subscribe(new RxSubscriber<List<NewsBean>>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<List<NewsBean>>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(List<NewsBean> data) {
                         mView.return_NewsData(data);

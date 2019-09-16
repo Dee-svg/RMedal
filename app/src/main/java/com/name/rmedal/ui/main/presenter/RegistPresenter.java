@@ -72,7 +72,7 @@ public class RegistPresenter extends RegistContract.Presenter {
                         httpRespose.setMessage(resposeMes);
                     }
                 })
-                .subscribe(new RxSubscriber<UserBean>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_UserData(data);
@@ -102,7 +102,7 @@ public class RegistPresenter extends RegistContract.Presenter {
                         httpRespose.setMessage(resposeMes);
                     }
                 })
-                .subscribe(new RxSubscriber<UserBean>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_Captcha(data);

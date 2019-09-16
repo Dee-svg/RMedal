@@ -69,7 +69,7 @@ public class PersonalPresenter extends PersonalContract.Presenter {
                         httpRespose.setResult(versionBean);
                     }
                 })
-                .subscribe(new RxSubscriber<CheckVersionBean>(mContext, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<CheckVersionBean>(this, mContext.getString(R.string.loading)) {
                     @Override
                     public void _onNext(CheckVersionBean data) {
                         mView.returnVersionData(data);
