@@ -2,6 +2,7 @@ package com.name.rmedal;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.name.rmedal.tools.CrashLogTools;
 import com.veni.tools.LogUtils;
 import com.veni.tools.VnUtils;
 
@@ -26,6 +27,8 @@ public class ApplicationRMedal  extends MultiDexApplication {
             builder.detectFileUriExposure();
         }*/
 
+        //崩溃日志收集
+        CrashLogTools.init(this);
 
     }
 }

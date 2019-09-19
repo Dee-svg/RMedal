@@ -35,6 +35,7 @@ public class AppConstant {
 
     /*固定数据*/
     public static final int pageSize = 20;
+    public static final String BASE_DIR_NAME = "Rmedal";
 
     /*SP  ACache 键*/
     public static final String PatternlockKey = "Patternlock";//手势密码

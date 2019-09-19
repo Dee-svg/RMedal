@@ -157,6 +157,21 @@ public class DataUtils {
     }
 
     /**
+     * 比较真实完整的判断身份证号码的工具
+     *
+     * @param IdCard 用户输入的身份证号码
+     * @return [true符合规范, false不符合规范]
+     */
+    public static boolean isRealIDCard(String IdCard) {
+        if (IdCard != null) {
+            int correct = new IdCardUtils(IdCard).isCorrect();
+            if (0 == correct) {// 符合规范
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
      * 验证身份证号码15或18位 包含以x结尾
      *
      * @param string 待验证文本
@@ -172,7 +187,7 @@ public class DataUtils {
      */
     public static String getSex(String IDCard) {
         String sex = "";
-        if (isEmpty(IDCard) || !isIDCard(IDCard)) {
+        if (isEmpty(IDCard) || !isRealIDCard(IDCard)) {
             return sex;
         }
         //15位身份证号
@@ -199,7 +214,7 @@ public class DataUtils {
      */
     public static int getAge(String IDCard) {
         int age = 0;
-        if (isEmpty(IDCard) || !isIDCard(IDCard)) {
+        if (isEmpty(IDCard) || !isRealIDCard(IDCard)) {
             return age;
         }
         Date date = new Date();
@@ -246,7 +261,7 @@ public class DataUtils {
      */
     public static String getBirthday(String IDCard, String dataFormat) {
         String birthday = "";
-        if (isEmpty(IDCard) || !isIDCard(IDCard)) {
+        if (isEmpty(IDCard) || !isRealIDCard(IDCard)) {
             return birthday;
         }
         String year = "";
