@@ -83,8 +83,7 @@ public class CaptureActivity extends BaseActivity {
             window.setStatusBarColor(Color.BLACK);
         }
 
-        chickCamear();
-        chickWrite();
+        permissionTools.chickWrite().chickCamear().initPermission();
     }
 
     @Override
@@ -130,13 +129,13 @@ public class CaptureActivity extends BaseActivity {
                 break;
             case R.id.scaner_code_album_rl:
                 /*打开相册*/
-                if (enabledwrite) {
+                if (permissionTools.isEnabledwrite()) {
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(intent, Constant.REQUEST_IMAGE);
                 } else {
-                    chickWrite();
+                    permissionTools.chickWrite().chickCamear().initPermission();
                 }
                 break;
         }

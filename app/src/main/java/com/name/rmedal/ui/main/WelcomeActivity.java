@@ -152,8 +152,8 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements W
     public void returnVersionData(CheckVersionBean data) {
         if (!DataUtils.isEmpty(data.getIsNeedUpdate()) && data.getIsNeedUpdate().equals("1")) {
             versionBean = data;
-            chickWrite();
-            if(enabledwrite){
+            permissionTools.chickWrite().initPermission();
+            if (permissionTools.isEnabledwrite()) {
                 getdownload();
             }
         } else {

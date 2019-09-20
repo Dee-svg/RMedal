@@ -223,9 +223,9 @@ public class PersonalFragment extends BaseFragment<PersonalPresenter> implements
     @Override
     public void returnVersionData(CheckVersionBean data) {
         versionBean = data;
-        chickWrite();
-        if(enabledwrite){
-            getdownload(enabledwrite);
+        permissionTools.chickWrite().initPermission();
+        if (permissionTools.isEnabledwrite()) {
+            getdownload(permissionTools.isEnabledwrite());
         }
     }
 

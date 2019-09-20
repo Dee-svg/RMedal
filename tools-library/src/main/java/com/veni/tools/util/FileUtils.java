@@ -112,8 +112,9 @@ public class FileUtils {
      */
     public static boolean sdCardIsAvailable() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File sd = new File(Environment.getExternalStorageDirectory().getPath());
-            return sd.canWrite();
+//            File sd = new File(Environment.getExternalStorageDirectory().getPath());
+//            return sd.canWrite();
+            return true;
         } else
             return false;
     }

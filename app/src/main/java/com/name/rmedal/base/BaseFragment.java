@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.name.rmedal.R;
+import com.name.rmedal.tools.PermissionTools;
 import com.veni.tools.base.mvp.BasePresenter;
 import com.veni.tools.base.ui.FragmentBase;
 import com.veni.tools.widget.TitleView;
@@ -26,6 +27,13 @@ public abstract class BaseFragment<T extends BasePresenter> extends FragmentBase
     TextView toolbarLine;
 
     private Unbinder unbinder;
+    public PermissionTools permissionTools;
+
+    @Override
+    public void doBeforeContentView() {
+        super.doBeforeContentView();
+        permissionTools = new PermissionTools(this);
+    }
 
     @Override
     public void doAfterContentView() {

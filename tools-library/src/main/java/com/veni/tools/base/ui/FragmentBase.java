@@ -1,10 +1,8 @@
 package com.veni.tools.base.ui;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -19,11 +17,7 @@ import com.veni.tools.base.mvp.BasePresenter;
 import com.veni.tools.base.mvp.TUtil;
 import com.veni.tools.baserx.RxManager;
 import com.veni.tools.listener.AntiShake;
-import com.veni.tools.util.DataUtils;
-import com.veni.tools.util.PermissionsUtils;
 import com.veni.tools.util.StatusBarUtils;
-
-import java.util.List;
 
 /**
  * 作者：kkan on 2017/01/30
@@ -42,10 +36,6 @@ public abstract class FragmentBase<T extends BasePresenter> extends Fragment {
 
     public T mPresenter;//Presenter 对象
     public StatusBarUtils statusBarUtils;
-    public boolean enabledinternet = false;//网络
-    public boolean enabledreadPhoneState = false;//读取手机状态
-    public boolean enabledcamear = false;//相机权限
-    public boolean enabledwrite = false;//文件读写权限
 
     protected View rootView;
     public Context context;
@@ -116,35 +106,6 @@ public abstract class FragmentBase<T extends BasePresenter> extends Fragment {
         }
     }
 
-    public void chickCamear() {
-        List<String> permissionList = PermissionsUtils.with(this)
-                .addPermission(Manifest.permission.CAMERA)
-                .initPermission();
-        enabledcamear = DataUtils.isEmpty(permissionList) || !permissionList.contains(Manifest.permission.CAMERA);
-    }
-
-    public void chickWrite() {
-        List<String> permissionList = PermissionsUtils.with(this)
-                .addPermission(Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
-                .addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .initPermission();
-        enabledwrite = DataUtils.isEmpty(permissionList) || !permissionList.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    }
-
-    public void chickInternet() {
-        List<String> permissionList = PermissionsUtils.with(this)
-                .addPermission(Manifest.permission.INTERNET)
-                .initPermission();
-        enabledinternet = DataUtils.isEmpty(permissionList) || !permissionList.contains(Manifest.permission.INTERNET);
-    }
-
-    public void chickReadPhoneState() {
-        List<String> permissionList = PermissionsUtils.with(this)
-                .addPermission(Manifest.permission.READ_PHONE_STATE)
-                .initPermission();
-        enabledreadPhoneState = DataUtils.isEmpty(permissionList) || !permissionList.contains(Manifest.permission.READ_PHONE_STATE);
-    }
-
     public void startActivity(@NonNull Class<? extends Activity> activity) {
         startActivity(activity,new JumpOptions());
     }
@@ -195,38 +156,4 @@ public abstract class FragmentBase<T extends BasePresenter> extends Fragment {
         destroyDialogBuilder();
     }
 
-    /*
-     * 注册权限申请回调
-     *
-     * @param requestCode  申请码
-     * @param permissions  申请的权限
-     * @param grantResults 结果
-     * */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionsUtils.PermissionsRequestCode) {
-            for (int i = 0; i < permissions.length; i++) {
-                String permission = permissions[i];
-                //grantResults[i] == PackageManager.PERMISSION_DENIED 拒绝权限
-                //grantResults[i] == PackageManager.PERMISSION_GRANTED 通过权限
-
-                if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && i < grantResults.length) {
-                    //通过文件读写权限
-                    enabledwrite = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-                } else if (permission.equals(Manifest.permission.CAMERA) && i < grantResults.length) {
-                    //通过相机权限
-                    enabledcamear = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-                } else if (permission.equals(Manifest.permission.INTERNET)) {
-                    if (!enabledinternet) {
-                        enabledinternet = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-                    }
-                } else if (permission.equals(Manifest.permission.READ_PHONE_STATE)) {
-                    if (!enabledreadPhoneState) {
-                        enabledreadPhoneState = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-                    }
-                }
-            }
-        }
-    }
 }
