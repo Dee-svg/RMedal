@@ -1,11 +1,10 @@
 package com.name.rmedal.ui.home.presenter;
 
 
-import com.name.rmedal.R;
+import com.name.rmedal.api.HttpManager;
 import com.name.rmedal.api.HttpRespose;
 import com.name.rmedal.api.RxSubscriber;
 import com.name.rmedal.modelbean.NewsBean;
-import com.name.rmedal.tools.AppTools;
 import com.name.rmedal.ui.AppConstant;
 import com.name.rmedal.ui.home.contract.HomeContract;
 import com.veni.tools.baserx.RxSchedulers;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Action;
 
 /**
  * 作者：Administrator on 2017/12/04 10:36
@@ -26,47 +25,34 @@ public class HomePresenter extends HomeContract.Presenter {
 
     @Override
     public void getWangYiNews(final int page) {
-        //正式调试
-       /*
         //请求参数
         HashMap<String, String> param = new HashMap<>();
-        param.put("page", page+"");
-        param.put("count", AppConstant.pageSize+"");
+        param.put("page", page + "");
+        param.put("count", AppConstant.pageSize + "");
         HttpManager.getInstance().getOkHttpUrlService().getWangYiNews(param)
-                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
-            @Override
-            public void _onNext(CheckVersionBean data) {
-                mView.returnVersionData(data);
-            }
-
-            @Override
-            public void onErrorSuccess(int code, String message, boolean issuccess) {
-                mView.onErrorSuccess(code, message, issuccess, false);
-            }
-        });*/
-        //测试数据
-        AppTools.createListObservable(NewsBean.class)
-                .compose(RxSchedulers.<HttpRespose<List<NewsBean>>>io_main())
-                .doOnNext(new Consumer<HttpRespose<List<NewsBean>>>() {
+                //TODO 正式环境 doFinally 需要注释掉
+                .doFinally(new Action() {
                     @Override
-                    public void accept(HttpRespose<List<NewsBean>> httpRespose) throws Exception {
+                    public void run() throws Exception {
                         int resposeCode = 201;
                         String resposeMes = "没有更多数据了！";
                         if(page<6){
                             List<NewsBean> newsBeans = new ArrayList<>();
-                            NewsBean newsBean= JsonUtils.parseObject(AppConstant.newsjson, NewsBean.class);
+                            NewsBean newsBean= JsonUtils.parseObject(AppConstant.newsjson,NewsBean.class);
                             for(int i=0;i<AppConstant.pageSize;i++){
                                 newsBeans.add(newsBean);
                             }
-                            httpRespose.setResult(newsBeans);
                             resposeCode = 200;
                             resposeMes = "数据获取成功！";
+                            mView.return_NewsData(newsBeans);
+                            mView.onErrorSuccess(resposeCode, resposeMes, true, false);
+                        }else {
+                            mView.onErrorSuccess(resposeCode, resposeMes, false, false);
                         }
-                        httpRespose.setCode(resposeCode);
-                        httpRespose.setMessage(resposeMes);
                     }
                 })
-                .subscribe(new RxSubscriber<List<NewsBean>>(this, mContext.getString(R.string.loading)) {
+                .compose(RxSchedulers.<HttpRespose<List<NewsBean>>>io_main())
+                .subscribe(new RxSubscriber<List<NewsBean>>(this) {
                     @Override
                     public void _onNext(List<NewsBean> data) {
                         mView.return_NewsData(data);
@@ -74,9 +60,8 @@ public class HomePresenter extends HomeContract.Presenter {
 
                     @Override
                     public void onErrorSuccess(int code, String message, boolean issuccess) {
-                        mView.onErrorSuccess(code, message, issuccess,true);
+                        mView.onErrorSuccess(code, message, issuccess, false);
                     }
-
                 });
     }
 }

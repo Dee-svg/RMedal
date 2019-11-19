@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.v4.content.FileProvider;
 
 import com.name.rmedal.BuildConfig;
-import com.name.rmedal.api.HttpRespose;
 import com.name.rmedal.modelbean.UserBean;
 import com.name.rmedal.ui.AppConstant;
 import com.veni.tools.LogUtils;
@@ -21,11 +20,6 @@ import com.veni.tools.util.SPUtils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 
 /**
  * 作者：kkan on 2018/02/26
@@ -65,33 +59,6 @@ public class AppTools {
         return userBean == null ? new UserBean() : userBean;
     }
 
-    public static<T> Observable<HttpRespose<T>> createObservable(Class<T> clas){
-        return  Observable.create(new ObservableOnSubscribe<HttpRespose<T>>() {
-            @Override
-            public void subscribe(ObservableEmitter<HttpRespose<T>> emitter) throws Exception {
-                HttpRespose<T> httpRespose =new HttpRespose<>();
-                httpRespose.setCode(200);
-                httpRespose.setMessage("");
-
-                emitter.onNext(httpRespose);
-                emitter.onComplete();
-            }
-        });
-    }
-
-    public static<T> Observable<HttpRespose<List<T>>> createListObservable(Class<T> clas){
-        return  Observable.create(new ObservableOnSubscribe<HttpRespose<List<T>>>() {
-            @Override
-            public void subscribe(ObservableEmitter<HttpRespose<List<T>>> emitter) throws Exception {
-                HttpRespose<List<T>> httpRespose =new HttpRespose<>();
-                httpRespose.setCode(200);
-                httpRespose.setMessage("");
-
-                emitter.onNext(httpRespose);
-                emitter.onComplete();
-            }
-        });
-    }
     public static String getSubUrl(String url) {
         String baseurl = "";
         if (url.startsWith("https://")) {

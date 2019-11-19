@@ -21,7 +21,6 @@ import com.veni.tools.widget.html.HTMLWebView;
 import com.veni.tools.widget.html.WebUtilsListener;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 作者：kkan on 2017/11/30
@@ -127,13 +126,6 @@ public class WebViewActivity extends BaseActivity {
             }
         }
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 
     /**

@@ -2,17 +2,11 @@ package com.name.rmedal.modelbean;
 
 import com.name.rmedal.ui.AppConstant;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Unique;
-
 /**
  * 作者：kkan on 2017/12/04 10:36
  * 当前类注释:
  * 用户,根据实际情况来
  */
-@Entity
 public class UserBean {
     /*
      * @Entity：告诉GreenDao该对象为实体，只有被@Entity注释的Bean类才能被dao类操作
@@ -24,44 +18,12 @@ public class UserBean {
      * @Unique：该属性值必须在数据库中是唯一值
      * @Generated：编译后自动生成的构造函数、方法等的注释，提示构造函数、方法等不能被修改
      */
-    @Id(autoincrement = true)
-    private Long id;
-    @Unique
     private String userId;// 用户ID
     private String userName;// 用户名
-    @Unique
     private String phone;// 电话
     private int sex;// 性别
     private String customerImg;//用户头像
     private String realName;//真实名字
-    private String password;//密码
-
-
-    @Generated(hash = 697490817)
-    public UserBean(Long id, String userId, String userName, String phone, int sex,
-            String customerImg, String realName, String password) {
-        this.id = id;
-        this.userId = userId;
-        this.userName = userName;
-        this.phone = phone;
-        this.sex = sex;
-        this.customerImg = customerImg;
-        this.realName = realName;
-        this.password = password;
-    }
-
-    @Generated(hash = 1203313951)
-    public UserBean() {
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;
@@ -117,11 +79,4 @@ public class UserBean {
         this.realName = realName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

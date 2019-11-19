@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -36,28 +37,17 @@ public class WelcomePresenter extends WelcomeContract.Presenter {
 
     @Override
     public void checkVersion(String version) {
-        //正式调试
-       /* //请求参数
+        //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("version", version);
         HttpManager.getInstance().getOkHttpUrlService().checkVersion(param)
-                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
-            @Override
-            public void _onNext(CheckVersionBean data) {
-                mView.returnVersionData(data);
-            }
-
-            @Override
-            public void onErrorSuccess(int code, String message, boolean issuccess) {
-                mView.onErrorSuccess(code, message, issuccess, false);
-            }
-        });*/
-        //测试数据
-        AppTools.createObservable(CheckVersionBean.class)
                 .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main())
-                .doOnNext(new Consumer<HttpRespose<CheckVersionBean>>() {
+                //TODO 正式环境 doFinally 需要注释掉  因为是假接口 会报错误 页面不会停留
+                .doFinally(new Action() {
                     @Override
-                    public void accept(HttpRespose<CheckVersionBean> httpRespose) throws Exception {
+                    public void run() throws Exception {
+                        int resposeCode = 200;
+                        String resposeMes = "数据获取成功！";
                         CheckVersionBean versionBean = new CheckVersionBean();
                         versionBean.setAppDownUrl(AppConstant.download_url);
                         versionBean.setIsNeedUpdate("1");
@@ -65,7 +55,8 @@ public class WelcomePresenter extends WelcomeContract.Presenter {
                                 "2.&nbsp;wwwwwwwww<br/>" +
                                 "3.&nbsp;eeeeee");
                         versionBean.setNewVersion(BuildConfig.VERSION_NAME + "1");
-                        httpRespose.setResult(versionBean);
+                        mView.returnVersionData(versionBean);
+                        mView.onErrorSuccess(resposeCode, resposeMes, true, false);
                     }
                 })
                 .subscribe(new RxSubscriber<CheckVersionBean>(this) {
@@ -92,17 +83,19 @@ public class WelcomePresenter extends WelcomeContract.Presenter {
         }
         final File file = new File(filePath, fileName);
 
-        HttpManager.getInstance().getDownloadUrlService(baseurl, new DownloadListener() {
-            @Override
-            public void onStartDownload(long length) {
-                mView.onStartDownload(length);
-            }
+        HttpManager.getInstance()
+                .getDownloadUrlService(baseurl, new DownloadListener() {
+                    @Override
+                    public void onStartDownload(long length) {
+                        mView.onStartDownload(length);
+                    }
 
-            @Override
-            public void onProgress(int progress) {
-                mView.onDownLoadProgress(progress);
-            }
-        }).download(url).compose(RxSchedulers.<ResponseBody>io_main())
+                    @Override
+                    public void onProgress(int progress) {
+                        mView.onDownLoadProgress(progress);
+                    }
+                })
+                .download(url).compose(RxSchedulers.<ResponseBody>io_main())
                 .map(new Function<ResponseBody, InputStream>() {
                     @Override
                     public InputStream apply(ResponseBody responseBody) throws Exception {

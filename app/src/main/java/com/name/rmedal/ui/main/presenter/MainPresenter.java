@@ -2,14 +2,12 @@ package com.name.rmedal.ui.main.presenter;
 
 
 import com.name.rmedal.BuildConfig;
-import com.name.rmedal.R;
 import com.name.rmedal.api.HttpManager;
 import com.name.rmedal.api.HttpRespose;
 import com.name.rmedal.api.RxSubscriber;
 import com.name.rmedal.modelbean.CheckVersionBean;
 import com.name.rmedal.modelbean.UserBean;
 import com.name.rmedal.tools.AppTools;
-import com.name.rmedal.tools.dao.UserDaoUtil;
 import com.name.rmedal.ui.AppConstant;
 import com.name.rmedal.ui.main.contract.MainContract;
 import com.veni.tools.baserx.DownloadListener;
@@ -22,10 +20,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -40,51 +38,12 @@ public class MainPresenter extends MainContract.Presenter {
 
     @Override
     public void getUserData(final String userid) {
-        //正式调试
-       /* //请求参数
+        //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("userid", userid);
         HttpManager.getInstance().getOkHttpUrlService().getUserData(param)
-                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
-            @Override
-            public void _onNext(CheckVersionBean data) {
-                mView.returnVersionData(data);
-            }
-
-            @Override
-            public void onErrorSuccess(int code, String message, boolean issuccess) {
-                mView.onErrorSuccess(code, message, issuccess, false);
-            }
-        });*/
-        //测试数据
-        AppTools.createObservable(UserBean.class)
                 .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())
-                .doOnNext(new Consumer<HttpRespose<UserBean>>() {
-                    @Override
-                    public void accept(HttpRespose<UserBean> httpRespose) throws Exception {
-                        UserDaoUtil daoUtil = new UserDaoUtil(mContext);
-                        List<UserBean> userBeanList = daoUtil.queryUserBeanByUserId(userid);
-                        int resposeCode = 201;
-                        String resposeMes = "用户不存在！";
-                        UserBean userBean = null;
-                        if (userBeanList != null && userBeanList.size() > 0) {
-                            for (UserBean bean : userBeanList) {
-                                if (bean.getUserId().equals(userid)) {
-                                    userBean = bean;
-                                    resposeCode = 200;
-                                    resposeMes = "成功";
-                                    break;
-                                }
-                            }
-                        }
-                        if (userBean != null) {
-                            httpRespose.setResult(userBean);
-                        }
-                        httpRespose.setCode(resposeCode);
-                        httpRespose.setMessage(resposeMes);
-                    }
-                })
-                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<UserBean>(this) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_UserData(data);
@@ -94,7 +53,6 @@ public class MainPresenter extends MainContract.Presenter {
                     public void onErrorSuccess(int code, String message, boolean issuccess) {
                         mView.onErrorSuccess(code, message, issuccess, false);
                     }
-
                 });
     }
 
@@ -103,14 +61,14 @@ public class MainPresenter extends MainContract.Presenter {
         //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("version", version);
-        //正式调试
-//        HttpManager.getInstance().getOkHttpUrlService().getLastVersion(param)
-        //测试数据
-        AppTools.createObservable(CheckVersionBean.class)
+        HttpManager.getInstance().getOkHttpUrlService().checkVersion(param)
                 .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main())
-                .doOnNext(new Consumer<HttpRespose<CheckVersionBean>>() {
+                //TODO 正式环境 doFinally 需要注释掉
+                .doFinally(new Action() {
                     @Override
-                    public void accept(HttpRespose<CheckVersionBean> httpRespose) throws Exception {
+                    public void run() throws Exception {
+                        int resposeCode = 200;
+                        String resposeMes = "数据获取成功！";
                         CheckVersionBean versionBean = new CheckVersionBean();
                         versionBean.setAppDownUrl(AppConstant.download_url);
                         versionBean.setIsNeedUpdate("1");
@@ -118,10 +76,11 @@ public class MainPresenter extends MainContract.Presenter {
                                 "2.&nbsp;wwwwwwwww<br/>" +
                                 "3.&nbsp;eeeeee");
                         versionBean.setNewVersion(BuildConfig.VERSION_NAME + "1");
-                        httpRespose.setResult(versionBean);
+                        mView.returnVersionData(versionBean);
+                        mView.onErrorSuccess(resposeCode, resposeMes, true, false);
                     }
                 })
-                .subscribe(new RxSubscriber<CheckVersionBean>(this, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<CheckVersionBean>(this) {
                     @Override
                     public void _onNext(CheckVersionBean data) {
                         mView.returnVersionData(data);
@@ -145,16 +104,19 @@ public class MainPresenter extends MainContract.Presenter {
         }
         final File file = new File(filePath, fileName);
 
-        HttpManager.getInstance().getDownloadUrlService(baseurl,  new DownloadListener() {
-            @Override
-            public void onStartDownload(long length) {
-                mView.onStartDownload(length);
-            }
-            @Override
-            public void onProgress(int progress) {
-                mView.onDownLoadProgress(progress);
-            }
-        }) .download(url).compose(RxSchedulers.<ResponseBody>io_main())
+        HttpManager.getInstance().getDownloadUrlService(baseurl,
+                new DownloadListener() {
+                    @Override
+                    public void onStartDownload(long length) {
+                        mView.onStartDownload(length);
+                    }
+
+                    @Override
+                    public void onProgress(int progress) {
+                        mView.onDownLoadProgress(progress);
+                    }
+                })
+                .download(url).compose(RxSchedulers.<ResponseBody>io_main())
                 .map(new Function<ResponseBody, InputStream>() {
                     @Override
                     public InputStream apply(ResponseBody responseBody) throws Exception {

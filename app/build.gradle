@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' // GreenDao数据库 apply plugin
 
 android {
     signingConfigs {
@@ -21,10 +20,8 @@ android {
         flavorDimensions "versionCode"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
-        ndk {
-            //APP的build.gradle设置支持的SO库架构
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64'
-        }
+
+        //TODO 以下根据需要该删删
         //以下为默认配置,如需修改在 productFlavors 中复写
         //取用BuildConfig.SEARCH_RADIUS
         // string.xml下的app_name  xml中不能存在对应的key
@@ -36,6 +33,7 @@ android {
         //渠道标签自定义
         buildConfigField "String", "VIP_CHANNEL", '"酒驾酒驾酒酒驾"'
     }
+    //TODO productFlavors 多渠道打包根据需要该删删
     productFlavors {
         //多渠道打包
         //buildTypes.debug默认加载productFlavors中第一个（名字排序）目录
@@ -134,9 +132,6 @@ dependencies {
     implementation deps.bga_banner
     //底部导航按钮点击效果
     implementation deps.ahbnaviga
-    //GreenDao数据库
-    implementation deps.greendao
-    implementation deps.greendao_gen
     //view注解
     implementation deps.butterknife
     annotationProcessor deps.knife_compil

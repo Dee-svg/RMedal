@@ -75,9 +75,9 @@ public class PatternlockActivity extends BaseActivity {
     private void upUIData(String inputpwd) {
         switch (data_type) {
             case AppConstant.YZPatternlock: {//验证手势密码
-                String pwd = ACache.get(context).getAsString(AppConstant.PatternlockKey+ userBean.getId());
+                String pwd = ACache.get(context).getAsString(AppConstant.PatternlockKey+ userBean.getUserId());
                 if (pwd.equals(inputpwd)) {
-                    ACache.get(context).put(AppConstant.PatternlockOK+ userBean.getId(), "1", ACache.TIME_DAY);
+                    ACache.get(context).put(AppConstant.PatternlockOK+ userBean.getUserId(), "1", ACache.TIME_DAY);
                     finish();
                 } else {
                     LogUtils.e(TAG, "pwd" + pwd);
@@ -95,8 +95,8 @@ public class PatternlockActivity extends BaseActivity {
             case AppConstant.CJPatternlock2: {//创建手势密码
                 patterLockView.clearPattern();
                 if (pwd_input.equals(inputpwd)) {
-                    ACache.get(context).put(AppConstant.PatternlockKey+ userBean.getId(), inputpwd);
-                    ACache.get(context).remove(AppConstant.PatternlockOK+ userBean.getId());
+                    ACache.get(context).put(AppConstant.PatternlockKey+ userBean.getUserId(), inputpwd);
+                    ACache.get(context).remove(AppConstant.PatternlockOK+ userBean.getUserId());
                     ToastTool.normal("手势密码创建成功！");
                     finish();
                 } else {

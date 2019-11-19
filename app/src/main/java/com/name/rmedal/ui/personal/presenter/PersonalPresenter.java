@@ -2,7 +2,6 @@ package com.name.rmedal.ui.personal.presenter;
 
 
 import com.name.rmedal.BuildConfig;
-import com.name.rmedal.R;
 import com.name.rmedal.api.HttpManager;
 import com.name.rmedal.api.HttpRespose;
 import com.name.rmedal.api.RxSubscriber;
@@ -23,6 +22,7 @@ import java.util.HashMap;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -37,28 +37,17 @@ public class PersonalPresenter extends PersonalContract.Presenter {
 
     @Override
     public void checkVersion(String version) {
-        //正式调试
-       /* //请求参数
+        //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("version", version);
         HttpManager.getInstance().getOkHttpUrlService().checkVersion(param)
-                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
-            @Override
-            public void _onNext(CheckVersionBean data) {
-                mView.returnVersionData(data);
-            }
-
-            @Override
-            public void onErrorSuccess(int code, String message, boolean issuccess) {
-                mView.onErrorSuccess(code, message, issuccess, false);
-            }
-        });*/
-        //测试数据
-        AppTools.createObservable(CheckVersionBean.class)
                 .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main())
-                .doOnNext(new Consumer<HttpRespose<CheckVersionBean>>() {
+                //TODO 正式环境 doFinally 需要注释掉
+                .doFinally(new Action() {
                     @Override
-                    public void accept(HttpRespose<CheckVersionBean> httpRespose) throws Exception {
+                    public void run() throws Exception {
+                        int resposeCode = 200;
+                        String resposeMes = "数据获取成功！";
                         CheckVersionBean versionBean = new CheckVersionBean();
                         versionBean.setAppDownUrl(AppConstant.download_url);
                         versionBean.setIsNeedUpdate("1");
@@ -66,10 +55,11 @@ public class PersonalPresenter extends PersonalContract.Presenter {
                                 "2.&nbsp;wwwwwwwww<br/>" +
                                 "3.&nbsp;eeeeee");
                         versionBean.setNewVersion(BuildConfig.VERSION_NAME + "1");
-                        httpRespose.setResult(versionBean);
+                        mView.returnVersionData(versionBean);
+                        mView.onErrorSuccess(resposeCode, resposeMes, true, false);
                     }
                 })
-                .subscribe(new RxSubscriber<CheckVersionBean>(this, mContext.getString(R.string.loading)) {
+                .subscribe(new RxSubscriber<CheckVersionBean>(this) {
                     @Override
                     public void _onNext(CheckVersionBean data) {
                         mView.returnVersionData(data);
@@ -93,16 +83,19 @@ public class PersonalPresenter extends PersonalContract.Presenter {
         }
         final File file = new File(filePath, fileName);
 
-        HttpManager.getInstance().getDownloadUrlService(baseurl,  new DownloadListener() {
-            @Override
-            public void onStartDownload(long length) {
-                mView.onStartDownload(length);
-            }
-            @Override
-            public void onProgress(int progress) {
-                mView.onDownLoadProgress(progress);
-            }
-        }) .download(url).compose(RxSchedulers.<ResponseBody>io_main())
+        HttpManager.getInstance()
+                .getDownloadUrlService(baseurl, new DownloadListener() {
+                    @Override
+                    public void onStartDownload(long length) {
+                        mView.onStartDownload(length);
+                    }
+
+                    @Override
+                    public void onProgress(int progress) {
+                        mView.onDownLoadProgress(progress);
+                    }
+                })
+                .download(url).compose(RxSchedulers.<ResponseBody>io_main())
                 .map(new Function<ResponseBody, InputStream>() {
                     @Override
                     public InputStream apply(ResponseBody responseBody) throws Exception {
@@ -137,6 +130,7 @@ public class PersonalPresenter extends PersonalContract.Presenter {
                     }
                 });
     }
+
     /**
      * 将输入流写入文件
      *

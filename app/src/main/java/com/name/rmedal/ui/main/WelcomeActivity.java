@@ -17,7 +17,6 @@ import com.name.rmedal.modelbean.CheckVersionBean;
 import com.name.rmedal.modelbean.ModelSVG;
 import com.name.rmedal.modelbean.UserBean;
 import com.name.rmedal.tools.AppTools;
-import com.name.rmedal.tools.dao.UserDaoUtil;
 import com.name.rmedal.ui.AppConstant;
 import com.name.rmedal.ui.main.contract.WelcomeContract;
 import com.name.rmedal.ui.main.presenter.WelcomePresenter;
@@ -72,15 +71,6 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements W
         HttpManager.getInstance().setToken(AppTools.getToken());
         //选择启动的SVG动画
         setSvg(ModelSVG.values()[0]);
-        UserDaoUtil daoUtil = new UserDaoUtil(context);
-        List<UserBean> userBeanList = daoUtil.queryAll();
-        if(userBeanList==null||userBeanList.size()<1){
-            UserBean   userBean = new UserBean();
-            userBean.setPassword("000000");
-            userBean.setUserId("15500374788");
-            userBean.setPhone("15500374788");
-            daoUtil.insertUserBean(userBean);
-        }
         //检测版本更新
         CheckUpdate();
     }
@@ -152,9 +142,10 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements W
     public void returnVersionData(CheckVersionBean data) {
         if (!DataUtils.isEmpty(data.getIsNeedUpdate()) && data.getIsNeedUpdate().equals("1")) {
             versionBean = data;
-            permissionTools.chickWrite().initPermission();
             if (permissionTools.isEnabledwrite()) {
                 getdownload();
+            }else {
+                permissionTools.chickWrite().initPermission();
             }
         } else {
             chikcisok = true;

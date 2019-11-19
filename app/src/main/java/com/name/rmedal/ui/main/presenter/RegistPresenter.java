@@ -1,17 +1,16 @@
 package com.name.rmedal.ui.main.presenter;
 
 
-import com.name.rmedal.R;
+import com.name.rmedal.api.HttpManager;
 import com.name.rmedal.api.HttpRespose;
 import com.name.rmedal.api.RxSubscriber;
 import com.name.rmedal.modelbean.UserBean;
-import com.name.rmedal.tools.AppTools;
-import com.name.rmedal.tools.dao.UserDaoUtil;
 import com.name.rmedal.ui.main.contract.RegistContract;
 import com.veni.tools.baserx.RxSchedulers;
 
-import java.util.List;
+import java.util.HashMap;
 
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -23,56 +22,25 @@ public class RegistPresenter extends RegistContract.Presenter {
 
     @Override
     public void registUser(final String phone, final String password) {
-        //正式调试
-       /* //请求参数
+        //请求参数
         HashMap<String, String> param = new HashMap<>();
         param.put("phone", phone);
         param.put("password", password);
         HttpManager.getInstance().getOkHttpUrlService().registUser(param)
-                .compose(RxSchedulers.<HttpRespose<CheckVersionBean>>io_main()).subscribe(new RxSubscriber<CheckVersionBean>() {
-            @Override
-            public void _onNext(CheckVersionBean data) {
-                mView.returnVersionData(data);
-            }
-
-            @Override
-            public void onErrorSuccess(int code, String message, boolean issuccess) {
-                mView.onErrorSuccess(code, message, issuccess, false);
-            }
-        });*/
-        //测试数据
-        AppTools.createObservable(UserBean.class)
-                .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())
-                .doOnNext(new Consumer<HttpRespose<UserBean>>() {
+                //TODO 正式环境 doFinally 需要注释掉
+                .doFinally(new Action() {
                     @Override
-                    public void accept(HttpRespose<UserBean> httpRespose) throws Exception {
-
-                        UserDaoUtil daoUtil = new UserDaoUtil(mContext);
-                        List<UserBean> userBeanList = daoUtil.queryUserBeanByPhone(phone);
-                        int resposeCode = 201;
-                        String resposeMes = "用户已存在！";
-                        UserBean userBean = null;
-                        if (userBeanList != null && userBeanList.size() > 0) {
-                            for (UserBean bean : userBeanList) {
-                                if (bean.getPhone().equals(phone)) {
-                                    break;
-                                }
-                            }
-                        } else {
-                            userBean = new UserBean();
-                            userBean.setPassword(password);
-                            userBean.setUserId(phone);
-                            userBean.setPhone(phone);
-                            daoUtil.insertUserBean(userBean);
-                            resposeCode = 200;
-                            resposeMes = "注册成功";
-                        }
-                        httpRespose.setResult(userBean);
-                        httpRespose.setCode(resposeCode);
-                        httpRespose.setMessage(resposeMes);
+                    public void run() throws Exception {
+                        int resposeCode = 200;
+                        String resposeMes = "注册成功！";
+                        UserBean userBean=new UserBean();
+                        userBean.setPhone(phone);
+                        mView.return_UserData(userBean);
+                        mView.onErrorSuccess(resposeCode, resposeMes, true, false);
                     }
                 })
-                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
+                .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())
+                .subscribe(new RxSubscriber<UserBean>(this) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_UserData(data);
@@ -80,29 +48,32 @@ public class RegistPresenter extends RegistContract.Presenter {
 
                     @Override
                     public void onErrorSuccess(int code, String message, boolean issuccess) {
-                        mView.onErrorSuccess(code, message, issuccess, true);
+                        mView.onErrorSuccess(code, message, issuccess, false);
                     }
-
                 });
     }
 
     @Override
     public void getCaptcha(String phone) {
-        //正式调试
-//        HttpManager.getInstance().getOkHttpUrlService().getUserData(phone,password)
-        //测试数据
-        AppTools.createObservable(UserBean.class)
-                .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())
+        //请求参数
+        HashMap<String, String> param = new HashMap<>();
+        param.put("phone", phone);
+        HttpManager.getInstance().getOkHttpUrlService().getCaptcha(param)
+                //TODO 正式环境 doOnNext 需要注释掉
                 .doOnNext(new Consumer<HttpRespose<UserBean>>() {
                     @Override
                     public void accept(HttpRespose<UserBean> httpRespose) throws Exception {
                         String resposeMes = "验证码已发送";
+                        int resposeCode = 200;
                         UserBean userBean = null;
                         httpRespose.setResult(userBean);
                         httpRespose.setMessage(resposeMes);
+                        mView.return_Captcha(userBean);
+                        mView.onErrorSuccess(resposeCode, resposeMes, true, false);
                     }
                 })
-                .subscribe(new RxSubscriber<UserBean>(this, mContext.getString(R.string.loading)) {
+                .compose(RxSchedulers.<HttpRespose<UserBean>>io_main())
+                .subscribe(new RxSubscriber<UserBean>(this) {
                     @Override
                     public void _onNext(UserBean data) {
                         mView.return_Captcha(data);
@@ -110,9 +81,8 @@ public class RegistPresenter extends RegistContract.Presenter {
 
                     @Override
                     public void onErrorSuccess(int code, String message, boolean issuccess) {
-                        mView.onErrorSuccess(code, message, issuccess, true);
+                        mView.onErrorSuccess(code, message, issuccess, false);
                     }
-
                 });
     }
 }

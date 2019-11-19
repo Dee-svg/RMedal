@@ -101,9 +101,9 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String haspatternlock = ACache.get(context).getAsString(AppConstant.PatternlockKey + userBean.getId());
+        String haspatternlock = ACache.get(context).getAsString(AppConstant.PatternlockKey + userBean.getUserId());
         settingPatternLockStatus.setText(DataUtils.isNullString(haspatternlock) ? R.string.show_open : R.string.show_off);
-        String hasfingerprintlock = ACache.get(context).getAsString(AppConstant.FingerprintKey + userBean.getId());
+        String hasfingerprintlock = ACache.get(context).getAsString(AppConstant.FingerprintKey + userBean.getUserId());
         settingFingerprintLockStatus.setText(DataUtils.isNullString(hasfingerprintlock) ? R.string.show_open : R.string.show_off);
     }
 
@@ -137,23 +137,23 @@ public class SettingActivity extends BaseActivity {
                         BigImagePagerActivity.startJump(img_list, 0));
                 break;
             case R.id.setting_pattern_lock_ll:
-                String haspatternlock = ACache.get(context).getAsString(AppConstant.PatternlockKey + userBean.getId());
+                String haspatternlock = ACache.get(context).getAsString(AppConstant.PatternlockKey + userBean.getUserId());
                 if (DataUtils.isNullString(haspatternlock)) {//没有手势密码
                     startActivity(PatternlockActivity.class, PatternlockActivity.startJump(AppConstant.CJPatternlock1));
                 } else {
-                    ACache.get(context).remove(AppConstant.PatternlockKey + userBean.getId());
-                    ACache.get(context).remove(AppConstant.PatternlockOK + userBean.getId());
+                    ACache.get(context).remove(AppConstant.PatternlockKey + userBean.getUserId());
+                    ACache.get(context).remove(AppConstant.PatternlockOK + userBean.getUserId());
                     settingPatternLockStatus.setText(R.string.show_open);
                 }
                 break;
             case R.id.setting_fingerprint_lock_ll:
-                String hasfingerprintlock = ACache.get(context).getAsString(AppConstant.FingerprintKey + userBean.getId());
+                String hasfingerprintlock = ACache.get(context).getAsString(AppConstant.FingerprintKey + userBean.getUserId());
                 if (DataUtils.isNullString(hasfingerprintlock)) {//没有指纹密码
                     FingerprintUtil.getFingerprintIsok(context);
                     startActivity(FingerprintLockActivity.class, FingerprintLockActivity.startJump(AppConstant.FingerprintKey1));
                 } else {
-                    ACache.get(context).remove(AppConstant.FingerprintKey + userBean.getId());
-                    ACache.get(context).remove(AppConstant.FingerprintOK + userBean.getId());
+                    ACache.get(context).remove(AppConstant.FingerprintKey + userBean.getUserId());
+                    ACache.get(context).remove(AppConstant.FingerprintOK + userBean.getUserId());
                     settingFingerprintLockStatus.setText(R.string.show_open);
                 }
                 break;

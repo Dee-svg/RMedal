@@ -212,14 +212,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
     private boolean chickFingerprintLockKey() {
-        String hasfingerprint = ACache.get(context).getAsString(AppConstant.FingerprintKey + userBean.getId());
-        String value = ACache.get(context).getAsString(AppConstant.FingerprintOK + userBean.getId());
+        String hasfingerprint = ACache.get(context).getAsString(AppConstant.FingerprintKey + userBean.getUserId());
+        String value = ACache.get(context).getAsString(AppConstant.FingerprintOK + userBean.getUserId());
         return (hasfingerprint != null) && (value == null);
     }
 
     private boolean chickPatternLockKey() {
-        String haspatternlock = ACache.get(context).getAsString(AppConstant.PatternlockKey + userBean.getId());
-        String value = ACache.get(context).getAsString(AppConstant.PatternlockOK + userBean.getId());
+        String haspatternlock = ACache.get(context).getAsString(AppConstant.PatternlockKey + userBean.getUserId());
+        String value = ACache.get(context).getAsString(AppConstant.PatternlockOK + userBean.getUserId());
         return (haspatternlock != null) && (value == null);
     }
 

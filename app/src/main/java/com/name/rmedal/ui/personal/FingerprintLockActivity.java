@@ -105,10 +105,10 @@ public class FingerprintLockActivity extends BaseActivity {
 
                 ToastTool.normal("指纹认证成功");
                 if (type.equals(AppConstant.FingerprintKey1)) {
-                    ACache.get(context).put(AppConstant.FingerprintKey + userBean.getId(), "1");
-                    ACache.get(context).remove(AppConstant.FingerprintOK+ userBean.getId());
+                    ACache.get(context).put(AppConstant.FingerprintKey + userBean.getUserId(), "1");
+                    ACache.get(context).remove(AppConstant.FingerprintOK+ userBean.getUserId());
                 } else {
-                    ACache.get(context).put(AppConstant.FingerprintOK+ userBean.getId(), "1", ACache.TIME_DAY);
+                    ACache.get(context).put(AppConstant.FingerprintOK+ userBean.getUserId(), "1", ACache.TIME_DAY);
                 }
                 context.finish();
             }
